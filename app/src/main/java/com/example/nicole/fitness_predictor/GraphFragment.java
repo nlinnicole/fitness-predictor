@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,13 +29,19 @@ public class GraphFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "xAxisData";
     private static final String ARG_PARAM2 = "yAxisData";
+    private static final String ARG_PARAM3 = "title";
+    private static final String ARG_PARAM4 = "yAxisLabel";
 
     //private double[] xAxisData;
     //private double[] yAxisData;
+    //private String title;
+    //private String yAxis;
 
     //SAMPLE DATA, delete later
     private double[] xAxisData = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     private double[] yAxisData = {14.5, 13.8, 12.9, 14.2, 14.0, 13.2, 13.7, 14.2, 15.2, 14.8};
+    private String title = "Average Speed vs. Day";
+    private String yAxisLabel = "Average speed";
 
     private OnFragmentInteractionListener mListener;
 
@@ -48,13 +55,17 @@ public class GraphFragment extends Fragment {
      *
      * @param xAxisData Parameter 1.
      * @param yAxisData Parameter 2.
+     * @param title Parameter 3.
+     * @param yAxisLabel Parameter 4
      * @return A new instance of fragment GraphFragment.
      */
-    public static GraphFragment newInstance(double[] xAxisData, double[] yAxisData) {
+    public static GraphFragment newInstance(double[] xAxisData, double[] yAxisData, String title, String yAxisLabel) {
         GraphFragment fragment = new GraphFragment();
         Bundle args = new Bundle();
         args.putDoubleArray(ARG_PARAM1, xAxisData);
         args.putDoubleArray(ARG_PARAM2, yAxisData);
+        args.putString(ARG_PARAM3, title);
+        args.putString(ARG_PARAM4, yAxisLabel);
         fragment.setArguments(args);
         return fragment;
     }
@@ -84,13 +95,29 @@ public class GraphFragment extends Fragment {
         data = datalist.toArray(data);
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
 
+        GraphView graph = (GraphView) v.findViewById(R.id.graph);
+
         //Style graph
-        series.setTitle("Fitness Graph");
-        series.setColor(Color.BLUE);
+        series.setColor(Color.rgb(251, 177, 60));
         series.setDrawDataPoints(true);
         series.setThickness(8);
 
-        GraphView graph = (GraphView) v.findViewById(R.id.graph);
+        graph.setTitle(title);
+        graph.setTitleTextSize(60);
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Day");
+        graph.getGridLabelRenderer().setVerticalAxisTitle(yAxisLabel);
+
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(20);
+
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(1);
+        graph.getViewport().setMaxX(8);
+
+        //scrollable on x axis
+        graph.getViewport().setScrollable(true);
+
         graph.addSeries(series);
         return v;
     }

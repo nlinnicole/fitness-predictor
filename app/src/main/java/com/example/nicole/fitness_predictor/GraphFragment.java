@@ -120,7 +120,7 @@ public class GraphFragment extends Fragment {
 
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(getMax()+5);
+        graph.getViewport().setMaxY(getMax()*1.10);
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(1);

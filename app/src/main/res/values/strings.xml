@@ -9,5 +9,4 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_sign_in_failed">Unknown user</string>
-    <string name="shared_preferences">com.example.nicole.fitness_predictor</string>
 </resources>

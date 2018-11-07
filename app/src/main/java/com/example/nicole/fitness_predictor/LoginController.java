@@ -18,6 +18,7 @@ public class LoginController {
     private SharedPreferences preferences;
 
     private static LoginController instance;
+    private static final String PREF = "com.example.nicole.fitness_predictor";
     private static final String ENDOMONDO_USERNAME = "ENDOMONDO_USERNAME";
     private static final String ENDOMONDO_PASSWORD = "ENDOMONDO_PASSWORD";
 
@@ -26,7 +27,6 @@ public class LoginController {
     }
 
     // Returns null if could not find the credentials in the keystore
-
     public EndomondoSession attemptLoginWithKeystore() {
         String encryptedUsername = preferences.getString(ENDOMONDO_USERNAME, "");
         String encryptedPassword = preferences.getString(ENDOMONDO_PASSWORD, "");
@@ -95,14 +95,13 @@ public class LoginController {
     }
 
 
-    public static LoginController getInstance(Activity activity) {
+    public static LoginController getInstance(Context context) {
         if (instance == null) {
 
-            SharedPreferences sharedPreferences = activity.getSharedPreferences(
-                    activity.getString(R.string.shared_preferences),
+            SharedPreferences sharedPreferences = context.getSharedPreferences(
+                    PREF,
                     Context.MODE_PRIVATE
             );
-
             instance = new LoginController(sharedPreferences);
         }
 

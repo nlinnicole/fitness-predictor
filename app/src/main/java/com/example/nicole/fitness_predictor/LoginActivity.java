@@ -3,6 +3,8 @@ package com.example.nicole.fitness_predictor;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import android.os.AsyncTask;
@@ -25,6 +27,9 @@ import com.moomeen.endo2java.error.LoginException;
 /**
  * A login screen that offers login to Endomondo via email/password.
  *
+ * The LoginActivity first tries to login with the credentials in the keystore first. Otherwise it
+ * displays the login form.
+ *
  * Based on Android Studio's Login Activity template
  */
 public class LoginActivity extends AppCompatActivity {
@@ -32,10 +37,6 @@ public class LoginActivity extends AppCompatActivity {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private AuthenticationLoginTask authTask = null;
-
-    // TODO: This should be global
-    private EndomondoSession session;
-
     private LoginController loginController;
 
     // UI references.
@@ -49,8 +50,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
-        loginController = LoginController.getInstance(this);
 
         // Set up the login form.
         emailView = (EditText) findViewById(R.id.email);
@@ -79,6 +78,11 @@ public class LoginActivity extends AppCompatActivity {
 
         loginFormView = findViewById(R.id.login_form);
         progressView = findViewById(R.id.login_progress);
+
+        showProgress(true);
+        loginController = LoginController.getInstance(this);
+        KeystoreLoginTask task = new KeystoreLoginTask();
+        task.execute((Void) null);
     }
 
     private void hideLoginError() {
@@ -181,10 +185,17 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void authenticationLoginSuccess() {
-        // TODO: Implement logic on success
-        hideLoginError();
+    private void handleLoginSuccess(@NonNull EndomondoSession session) {
+        FitnessApplication application = (FitnessApplication)getApplicationContext();
+        application.setEndomondoSession(session);
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
 
+    private void keystoreLoginFailed() {
+        Log.d("FITPREDLOG", "Failed to log in to Endomondo with keystore. Displaying login activity.");
+        showProgress(false);
+        hideLoginError();
     }
 
     /**
@@ -223,7 +234,8 @@ public class LoginActivity extends AppCompatActivity {
 
             if (session != null) {
                 Log.d("FITPREDLOG","Successfully logged in to Endomondo with email '" + email + "'");
-                authenticationLoginSuccess();
+                hideLoginError();
+                handleLoginSuccess(session);
             } else {
                 showLoginError();
             }
@@ -234,6 +246,32 @@ public class LoginActivity extends AppCompatActivity {
         protected void onCancelled() {
             authTask = null;
             showProgress(false);
+        }
+    }
+
+
+    private class KeystoreLoginTask extends AsyncTask<Void, Void, EndomondoSession> {
+        KeystoreLoginTask() { }
+
+        @Override
+        protected EndomondoSession doInBackground(Void... params) {
+            Log.d("FITPREDLOG", "Attempting to log to Endomondo with keystore");
+            return loginController.attemptLoginWithKeystore();
+        }
+
+        @Override
+        protected void onPostExecute(final EndomondoSession session) {
+            if (session != null) {
+                Log.d("FITPREDLOG", "Successfully logged in to Endomondo with keystore");
+                handleLoginSuccess(session);
+            } else {
+                keystoreLoginFailed();
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            keystoreLoginFailed();
         }
     }
 }

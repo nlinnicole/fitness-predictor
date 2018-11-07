@@ -158,13 +158,19 @@ public class GraphFragment extends Fragment {
     }
 
     private int getMax() {
-        int max = (int) yAxisData[0];
-        for (int i = 0; i < yAxisData.length-1; i++){
-            if (yAxisData[i] > max)
-                max = (int) yAxisData[i];
+        if (yAxisData.length > 0) {
+            int max = (int) yAxisData[0];
+
+            for (int i = 1; i < yAxisData.length; i++) {
+                if (yAxisData[i] > max)
+                    max = (int) yAxisData[i];
+            }
+
+            return max;
+        } else {
+            // Not sure what a good default here would be ?
+            return 10;
         }
-        System.out.println("MAX: "+ max);
-        return max;
     }
 
     /**

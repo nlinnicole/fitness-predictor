@@ -11,13 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -34,12 +37,14 @@ public class GraphFragment extends Fragment {
     private static final String ARG_PARAM3 = "t";
     private static final String ARG_PARAM4 = "yLabel";
     private static final String ARG_PARAM5 = "xLabel";
+    private static final String ARG_PARAM6 = "d";
 
-    private double[] xAxisData;
+    private Date[] xAxisData;
     private double[] yAxisData;
     private String title;
     private String yAxisLabel;
     private String xAxisLabel;
+    private String[] dates;
 
     private boolean isBar = true;
 
@@ -60,16 +65,20 @@ public class GraphFragment extends Fragment {
      * @param xLabel Parameter 5
      * @return A new instance of fragment GraphFragment.
      */
-    public static GraphFragment newInstance(double[] xData, double[] yData, String t, String yLabel, String xLabel) {
+    public static GraphFragment newInstance(Date[] xData, double[] yData, String t, String yLabel, String xLabel) {
         GraphFragment fragment = new GraphFragment();
         Bundle args = new Bundle();
-        args.putDoubleArray(ARG_PARAM1, xData);
+        //change Date to longs
+        long[] dateInMilli = new long[xData.length];
+        for(int i = 0; i < xData.length; i++){
+            dateInMilli[i] = xData[i].getTime();
+        }
+        args.putLongArray(ARG_PARAM1, dateInMilli);
         args.putDoubleArray(ARG_PARAM2, yData);
         args.putString(ARG_PARAM3, t);
         args.putString(ARG_PARAM4, yLabel);
         args.putString(ARG_PARAM5, xLabel);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -78,7 +87,17 @@ public class GraphFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             //set instance variables for graph
-            xAxisData = getArguments().getDoubleArray(ARG_PARAM1);
+
+            //change longs back to Date
+            long[] dateInMilli = getArguments().getLongArray(ARG_PARAM1);
+            Calendar c = Calendar.getInstance();
+            xAxisData = new Date[dateInMilli.length];
+            for(int i = 0; i < dateInMilli.length; i++){
+                Date d = new Date(dateInMilli[i] * 1000);
+                d = c.getTime();
+                xAxisData[i] = d;
+            }
+
             yAxisData = getArguments().getDoubleArray(ARG_PARAM2);
             title = getArguments().getString(ARG_PARAM3);
             yAxisLabel = getArguments().getString(ARG_PARAM4);
@@ -100,21 +119,29 @@ public class GraphFragment extends Fragment {
         DataPoint[] data = new DataPoint[datalist.size()];
         data = datalist.toArray(data);
 
-        //Graph properties
+        //GRAPH PROPERTIES
         GraphView graph = (GraphView) v.findViewById(R.id.graph);
 
+        //set labels
         graph.setTitle(title);
         graph.setTitleTextSize(60);
         graph.getGridLabelRenderer().setHorizontalAxisTitle(xAxisLabel);
         graph.getGridLabelRenderer().setVerticalAxisTitle(yAxisLabel);
 
+        //set graph boundaries
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(getMax()*1.10);
 
         graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(1);
-        graph.getViewport().setMaxX(10);
+//        graph.getViewport().setMinX(1);
+//        graph.getViewport().setMaxX(3);
+
+        //set x-axis as dates
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
+        graph.getGridLabelRenderer().setHumanRounding(false);
+
 
         graph.getViewport().setScrollable(true);
 

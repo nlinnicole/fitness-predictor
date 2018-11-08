@@ -97,6 +97,7 @@ public class GraphFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_graph, container, false);
 
+        //DataPoint is (Date, double)
         ArrayList<DataPoint> datalist = new ArrayList<DataPoint>();
 
         for(int i = 0; i < xAxisData.length; i++){
@@ -119,6 +120,7 @@ public class GraphFragment extends Fragment {
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(getMax()*1.10);
 
+        //format x axis to show dates
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
         graph.getGridLabelRenderer().setNumHorizontalLabels(5);
 
@@ -127,7 +129,6 @@ public class GraphFragment extends Fragment {
         graph.getViewport().setXAxisBoundsManual(true);
 
         graph.getGridLabelRenderer().setHumanRounding(false);
-
 
         graph.getViewport().setScrollable(true);
 

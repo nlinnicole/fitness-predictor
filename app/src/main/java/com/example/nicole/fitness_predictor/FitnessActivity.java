@@ -130,9 +130,9 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
          * (eg: We display 2018-06-01 even if there was no workout that day)
          */
         DateTime currentTime = workouts.get(0).getStartTime();
-        int j = 0;
         for (int i = 0; i < size; i++) {
             Workout workout = workouts.get(i);
+            //add workout data to respective ArrayLists
             while (!isSameDay(currentTime, workout.getStartTime())) {
                 averageSpeedData.add(Double.valueOf(0));
                 durationData.add(Double.valueOf(0));
@@ -160,6 +160,7 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         String yAxisLabel2 = getString(R.string.fitness_graph_duration_axis);
         String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
 
+        //Create graph 1
         GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
                                                                 toPrimitive(averageSpeedData),
                                                                 title,
@@ -170,6 +171,7 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commit();
 
+        //Create graph 2
         GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
                                                                  toPrimitive(durationData),
                                                                  title2,

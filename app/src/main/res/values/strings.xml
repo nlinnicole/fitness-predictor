@@ -16,4 +16,10 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_sign_in_failed">Unknown user</string>
+
+    <string name="fitness_graph_average_speed_title">Average Speed per Day</string>
+    <string name="fitness_graph_duration_title">Duration per Day</string>
+    <string name="fitness_graph_date_axis">Day</string>
+    <string name="fitness_graph_average_speed_axis">Average Speed (km/h)</string>
+    <string name="fitness_graph_duration_axis">Duration (min)</string>
 </resources>

@@ -113,22 +113,43 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 
     // TODO: Display graph first and then asynchronously add the data ?
     private void displayFitnessActivity(List<Workout> workouts) {
-        workouts = sortAndFilter(workouts);
-        int size = workouts.size();
-        double[] averageSpeedData = new double[size];
-        double[] durationData = new double[size];
-        double[] xAxisData = new double[size];
+        if (workouts.isEmpty()) {
+            return;
+        }
 
+        workouts = sortAndFilter(workouts);
+
+        int size = workouts.size();
+        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
+        ArrayList<Double> durationData = new ArrayList<>(size);
+        ArrayList<Double> xAxisData = new ArrayList<>(size);
+
+        /**
+         * This disgusting piece of code fills the date that are missing
+         * (eg: We display 2018-06-01 even if there was no workout that day)
+         */
+        DateTime currentTime = workouts.get(0).getStartTime();
+        int j = 0;
         for (int i = 0; i < size; i++) {
-            Double averageSpeed = workouts.get(i).getSpeedAvg();
-            DateTime startTime = workouts.get(i).getStartTime();
-            Duration duration = workouts.get(i).getDuration();
+            Workout workout = workouts.get(i);
+            while (!isSameDay(currentTime, workout.getStartTime())) {
+                averageSpeedData.add(Double.valueOf(0));
+                durationData.add(Double.valueOf(0));
+                xAxisData.add(Double.valueOf(j));
+
+                currentTime = currentTime.plusDays(1);
+                j++;
+            }
+
+            Double averageSpeed = workout.getSpeedAvg();
+            DateTime startTime = workout.getStartTime();
+            Duration duration = workout.getDuration();
 
             Log.d("FITPREDLOG", "speed: " + averageSpeed + ", duration: " + duration + ", start: " + startTime);
 
-            averageSpeedData[i] = averageSpeed.doubleValue();
-            durationData[i] = duration.getStandardMinutes();
-            xAxisData[i] = i;
+            averageSpeedData.add(averageSpeed.doubleValue());
+            durationData.add(Double.valueOf(duration.getStandardMinutes()));
+            xAxisData.add(Double.valueOf(j));
         }
 
         String title = getString(R.string.fitness_graph_average_speed_title);
@@ -139,15 +160,33 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         String yAxisLabel2 = getString(R.string.fitness_graph_duration_axis);
         String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
 
-        GraphFragment graphFragment = GraphFragment.newInstance(xAxisData, averageSpeedData, title, yAxisLabel, xAxisLabel);
+        GraphFragment graphFragment = GraphFragment.newInstance(toPrimitive(xAxisData),
+                                                                toPrimitive(averageSpeedData),
+                                                                title,
+                                                                yAxisLabel,
+                                                                xAxisLabel);
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commit();
 
-        GraphFragment graphFragment2 = GraphFragment.newInstance(xAxisData, durationData, title2, yAxisLabel2, xAxisLabel2);
+        GraphFragment graphFragment2 = GraphFragment.newInstance(toPrimitive(xAxisData),
+                                                                 toPrimitive(durationData),
+                                                                 title2,
+                                                                 yAxisLabel2,
+                                                                 xAxisLabel2);
 
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();
         ft2.add(R.id.graphContainer, graphFragment2).commit();
+    }
+
+    private double[] toPrimitive(ArrayList<Double> list) {
+        double[] result = new double[list.size()];
+
+        for (int i = 0; i < list.size(); i++) {
+            result[i] = list.get(i);
+        }
+
+        return result;
     }
 
     private class EndomondoQueryTask extends AsyncTask<Void, List<Workout>, List<Workout>> {

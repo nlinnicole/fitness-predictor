@@ -89,13 +89,13 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
             xAxisData[i] = i;
         }
 
-        String title = "Average Speed vs. Day";
-        String yAxisLabel = "Average Speed";
-        String xAxisLabel = "Day";
+        String title = getString(R.string.fitness_graph_average_speed_title);
+        String yAxisLabel = getString(R.string.fitness_graph_average_speed_axis);
+        String xAxisLabel = getString(R.string.fitness_graph_date_axis);
 
-        String title2 = "Duration vs. Day";
-        String yAxisLabel2 = "Average Time (min)";
-        String xAxisLabel2 = "Day";
+        String title2 = getString(R.string.fitness_graph_duration_title);
+        String yAxisLabel2 = getString(R.string.fitness_graph_duration_axis);
+        String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
 
         GraphFragment graphFragment = GraphFragment.newInstance(xAxisData, averageSpeedData, title, yAxisLabel, xAxisLabel);
 

@@ -192,11 +192,9 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
     //NEED BETTER SOLUTION TO NOT REPEAT CODE
     private Date[] toDate(ArrayList<Date> list){
         Date[] result = new Date[list.size()];
-        System.out.println("CHECKING SIZE: ");
 
         for(int i = 0; i < list.size(); i++){
             result[i] = list.get(i);
-            System.out.println(result[i].toString());
         }
         return result;
     }

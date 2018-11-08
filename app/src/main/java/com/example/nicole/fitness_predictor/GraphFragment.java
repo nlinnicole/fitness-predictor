@@ -68,12 +68,8 @@ public class GraphFragment extends Fragment {
     public static GraphFragment newInstance(Date[] xData, double[] yData, String t, String yLabel, String xLabel) {
         GraphFragment fragment = new GraphFragment();
         Bundle args = new Bundle();
-        //change Date to longs
-        long[] dateInMilli = new long[xData.length];
-        for(int i = 0; i < xData.length; i++){
-            dateInMilli[i] = xData[i].getTime();
-        }
-        args.putLongArray(ARG_PARAM1, dateInMilli);
+
+        args.putSerializable(ARG_PARAM1, xData);
         args.putDoubleArray(ARG_PARAM2, yData);
         args.putString(ARG_PARAM3, t);
         args.putString(ARG_PARAM4, yLabel);
@@ -87,17 +83,7 @@ public class GraphFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             //set instance variables for graph
-
-            //change longs back to Date
-            long[] dateInMilli = getArguments().getLongArray(ARG_PARAM1);
-            Calendar c = Calendar.getInstance();
-            xAxisData = new Date[dateInMilli.length];
-            for(int i = 0; i < dateInMilli.length; i++){
-                Date d = new Date(dateInMilli[i] * 1000);
-                d = c.getTime();
-                xAxisData[i] = d;
-            }
-
+            xAxisData = (Date[]) getArguments().getSerializable(ARG_PARAM1);
             yAxisData = getArguments().getDoubleArray(ARG_PARAM2);
             title = getArguments().getString(ARG_PARAM3);
             yAxisLabel = getArguments().getString(ARG_PARAM4);
@@ -110,6 +96,11 @@ public class GraphFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_graph, container, false);
+
+        System.out.println("CHECKING DATES: ");
+        for (int i = 0; i <xAxisData.length; i++){
+            System.out.println(xAxisData[i].toString());
+        }
 
         //List of data points obtained from GraphFragment initialization
         ArrayList<DataPoint> datalist = new ArrayList<DataPoint>();

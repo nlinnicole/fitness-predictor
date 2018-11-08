@@ -23,6 +23,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class FitnessActivity extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener {
@@ -70,8 +72,48 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 
     }
 
+    private boolean isSameDay(DateTime a, DateTime b) {
+        boolean isSameYear = a.getYear() == b.getYear();
+        boolean isSameDayOfYear = a.getDayOfYear() == b.getDayOfYear();
+
+        return isSameYear && isSameDayOfYear;
+    }
+
+    private List<Workout> sortAndFilter(List<Workout> workouts) {
+        if (workouts.isEmpty()) {
+            return workouts;
+        }
+
+        Collections.sort(workouts, new Comparator<Workout>() {
+            @Override
+            public int compare(Workout a, Workout b) {
+                return a.getStartTime().compareTo(b.getStartTime());
+            }
+        });
+
+        // FIXME TODO: For now we remove workouts that are on the same dates
+        ArrayList<Workout> result = new ArrayList<>(workouts.size());
+        result.add(workouts.get(0));
+
+        DateTime currentTime = result.get(0).getStartTime();
+
+        for (int i = 1; i < workouts.size(); i++) {
+            Workout workout = workouts.get(i);
+
+            if (isSameDay(currentTime, workout.getStartTime())) {
+                continue;
+            }
+
+            result.add(workout);
+            currentTime = workout.getStartTime();
+        }
+
+        return result;
+    }
+
     // TODO: Display graph first and then asynchronously add the data ?
     private void displayFitnessActivity(List<Workout> workouts) {
+        workouts = sortAndFilter(workouts);
         int size = workouts.size();
         double[] averageSpeedData = new double[size];
         double[] durationData = new double[size];

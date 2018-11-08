@@ -97,13 +97,8 @@ public class GraphFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_graph, container, false);
 
-        System.out.println("CHECKING DATES: ");
-        for (int i = 0; i <xAxisData.length; i++){
-            System.out.println(xAxisData[i].toString());
-        }
-
-        //List of data points obtained from GraphFragment initialization
         ArrayList<DataPoint> datalist = new ArrayList<DataPoint>();
+
         for(int i = 0; i < xAxisData.length; i++){
             datalist.add(new DataPoint (xAxisData[i], yAxisData[i]));
         }
@@ -124,13 +119,13 @@ public class GraphFragment extends Fragment {
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(getMax()*1.10);
 
-        graph.getViewport().setXAxisBoundsManual(true);
-//        graph.getViewport().setMinX(1);
-//        graph.getViewport().setMaxX(3);
-
-        //set x-axis as dates
         graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(3);
+        graph.getGridLabelRenderer().setNumHorizontalLabels(5);
+
+        graph.getViewport().setMinX(xAxisData[0].getTime());
+        graph.getViewport().setMaxX(xAxisData[4].getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+
         graph.getGridLabelRenderer().setHumanRounding(false);
 
 
@@ -143,7 +138,7 @@ public class GraphFragment extends Fragment {
             //Style bar graph
             series.setDrawValuesOnTop(false);
             series.setColor(Color.rgb(251, 177, 60));
-            series.setSpacing(50);
+            series.setSpacing(30);
 
             graph.addSeries(series);
 

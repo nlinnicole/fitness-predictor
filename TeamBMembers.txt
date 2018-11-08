@@ -3,3 +3,4 @@ Team B Members:
 	Thomas
 	Yilin
 	Swetang
+	Djahid

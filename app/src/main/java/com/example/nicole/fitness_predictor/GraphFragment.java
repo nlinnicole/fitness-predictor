@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -34,18 +35,13 @@ public class GraphFragment extends Fragment {
     private static final String ARG_PARAM4 = "yLabel";
     private static final String ARG_PARAM5 = "xLabel";
 
-//    private double[] xAxisData;
-//    private double[] yAxisData;
-//    private String title;
-//    private String yAxisLabel;
-//    private String xAxisLabel;
+    private double[] xAxisData;
+    private double[] yAxisData;
+    private String title;
+    private String yAxisLabel;
+    private String xAxisLabel;
 
-    //SAMPLE DATA, delete later
-    private double[] xAxisData = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    private double[] yAxisData = {14.5, 13.8, 12.9, 14.2, 14.0, 13.2, 13.7, 14.2, 15.2, 14.8};
-    private String title = "Average Speed vs. Day";
-    private String yAxisLabel = "Average speed";
-    private String xAxisLabel = "Day";
+    private boolean isBar = true;
 
     private OnFragmentInteractionListener mListener;
 
@@ -98,20 +94,14 @@ public class GraphFragment extends Fragment {
 
         //List of data points obtained from GraphFragment initialization
         ArrayList<DataPoint> datalist = new ArrayList<DataPoint>();
-
         for(int i = 0; i < xAxisData.length; i++){
             datalist.add(new DataPoint (xAxisData[i], yAxisData[i]));
         }
         DataPoint[] data = new DataPoint[datalist.size()];
         data = datalist.toArray(data);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
 
+        //Graph properties
         GraphView graph = (GraphView) v.findViewById(R.id.graph);
-
-        //Style graph
-        series.setColor(Color.rgb(251, 177, 60));
-        series.setDrawDataPoints(true);
-        series.setThickness(8);
 
         graph.setTitle(title);
         graph.setTitleTextSize(60);
@@ -124,12 +114,32 @@ public class GraphFragment extends Fragment {
 
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(1);
-        graph.getViewport().setMaxX(8);
+        graph.getViewport().setMaxX(10);
 
-        //scrollable on x axis
         graph.getViewport().setScrollable(true);
 
-        graph.addSeries(series);
+        //Line or Bar graph
+        if(isBar){
+            BarGraphSeries series = new BarGraphSeries<>(data);
+
+            //Style bar graph
+            series.setDrawValuesOnTop(false);
+            series.setColor(Color.rgb(251, 177, 60));
+            series.setSpacing(50);
+
+            graph.addSeries(series);
+
+        } else {
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
+
+            //Style line graph
+            series.setColor(Color.rgb(251, 177, 60));
+            series.setDrawDataPoints(true);
+            series.setThickness(8);
+
+            graph.addSeries(series);
+        }
+
         return v;
     }
 
@@ -171,6 +181,14 @@ public class GraphFragment extends Fragment {
             // Not sure what a good default here would be ?
             return 10;
         }
+    }
+
+    public void toLine(){
+        isBar = false;
+    }
+
+    public void toBar() {
+        isBar = true;
     }
 
     /**

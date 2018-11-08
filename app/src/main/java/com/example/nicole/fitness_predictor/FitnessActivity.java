@@ -165,6 +165,7 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
                                                                 title,
                                                                 yAxisLabel,
                                                                 xAxisLabel);
+        graphFragment.toBar();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commit();
@@ -174,7 +175,7 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
                                                                  title2,
                                                                  yAxisLabel2,
                                                                  xAxisLabel2);
-
+        graphFragment2.toLine();
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();
         ft2.add(R.id.graphContainer, graphFragment2).commit();
     }

@@ -112,11 +112,6 @@ public class GraphFragment extends Fragment {
         GraphView graph = (GraphView) v.findViewById(R.id.graph);
         Viewport vp = graph.getViewport();
         GridLabelRenderer glr = graph.getGridLabelRenderer();
-
-        //Style graph
-        series.setColor(getResources().getColor(R.color.colorGraph));
-        series.setDrawDataPoints(true);
-        series.setThickness(8);
       
         graph.setTitle(title);
         graph.setTitleTextSize(60);
@@ -148,7 +143,7 @@ public class GraphFragment extends Fragment {
 
             //Style bar graph
             series.setDrawValuesOnTop(false);
-            series.setColor(Color.rgb(251, 177, 60));
+            series.setColor(getResources().getColor(R.color.colorGraph));
             series.setSpacing(60);
 
             graph.addSeries(series);
@@ -157,7 +152,7 @@ public class GraphFragment extends Fragment {
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
 
             //Style line graph
-            series.setColor(Color.rgb(251, 177, 60));
+            series.setColor(getResources().getColor(R.color.colorGraph));
             series.setDrawDataPoints(true);
             series.setThickness(8);
 

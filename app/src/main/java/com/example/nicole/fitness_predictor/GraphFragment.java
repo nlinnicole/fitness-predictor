@@ -113,7 +113,11 @@ public class GraphFragment extends Fragment {
         Viewport vp = graph.getViewport();
         GridLabelRenderer glr = graph.getGridLabelRenderer();
 
-        //set labels
+        //Style graph
+        series.setColor(getResources().getColor(R.color.colorGraph));
+        series.setDrawDataPoints(true);
+        series.setThickness(8);
+      
         graph.setTitle(title);
         graph.setTitleTextSize(60);
         graph.getGridLabelRenderer().setHorizontalAxisTitle(xAxisLabel);

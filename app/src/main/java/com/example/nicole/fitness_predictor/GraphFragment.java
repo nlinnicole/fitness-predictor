@@ -109,7 +109,7 @@ public class GraphFragment extends Fragment {
         GraphView graph = (GraphView) v.findViewById(R.id.graph);
 
         //Style graph
-        series.setColor(Color.rgb(251, 177, 60));
+        series.setColor(getResources().getColor(R.color.colorGraph));
         series.setDrawDataPoints(true);
         series.setThickness(8);
 

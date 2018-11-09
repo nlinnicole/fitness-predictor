@@ -150,6 +150,8 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 
             averageSpeedData.add(averageSpeed.doubleValue());
             durationData.add(Double.valueOf(duration.getStandardMinutes()));
+            xAxisData.add(currentTime.toDate());
+            currentTime = currentTime.plusDays(1);
         }
 
         String title = getString(R.string.fitness_graph_average_speed_title);

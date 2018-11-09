@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
@@ -108,6 +110,8 @@ public class GraphFragment extends Fragment {
 
         //GRAPH PROPERTIES
         GraphView graph = (GraphView) v.findViewById(R.id.graph);
+        Viewport vp = graph.getViewport();
+        GridLabelRenderer glr = graph.getGridLabelRenderer();
 
         //set labels
         graph.setTitle(title);
@@ -116,21 +120,23 @@ public class GraphFragment extends Fragment {
         graph.getGridLabelRenderer().setVerticalAxisTitle(yAxisLabel);
 
         //set graph boundaries
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(getMax()*1.10);
+        vp.setYAxisBoundsManual(true);
+        vp.setMinY(0);
+        vp.setMaxY(getMax()*1.10);
+
+        vp.setXAxisBoundsManual(true);
+        vp.setMinX(xAxisData[0].getTime());
+        vp.setMaxX(xAxisData[4].getTime());
 
         //format x axis to show dates
-        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
-        graph.getGridLabelRenderer().setNumHorizontalLabels(5);
+        glr.setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        glr.setNumHorizontalLabels(5);
+        glr.setHorizontalLabelsAngle(135);
+        glr.setLabelsSpace(20);
 
-        graph.getViewport().setMinX(xAxisData[0].getTime());
-        graph.getViewport().setMaxX(xAxisData[4].getTime());
-        graph.getViewport().setXAxisBoundsManual(true);
+        glr.setHumanRounding(false);
 
-        graph.getGridLabelRenderer().setHumanRounding(false);
-
-        graph.getViewport().setScrollable(true);
+        vp.setScrollable(true);
 
         //Line or Bar graph
         if(isBar){
@@ -139,7 +145,7 @@ public class GraphFragment extends Fragment {
             //Style bar graph
             series.setDrawValuesOnTop(false);
             series.setColor(Color.rgb(251, 177, 60));
-            series.setSpacing(30);
+            series.setSpacing(60);
 
             graph.addSeries(series);
 

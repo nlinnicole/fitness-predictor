@@ -11,12 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
+import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
+import com.jjoe64.graphview.series.BarGraphSeries;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,19 +39,16 @@ public class GraphFragment extends Fragment {
     private static final String ARG_PARAM3 = "t";
     private static final String ARG_PARAM4 = "yLabel";
     private static final String ARG_PARAM5 = "xLabel";
+    private static final String ARG_PARAM6 = "d";
 
-//    private double[] xAxisData;
-//    private double[] yAxisData;
-//    private String title;
-//    private String yAxisLabel;
-//    private String xAxisLabel;
+    private Date[] xAxisData;
+    private double[] yAxisData;
+    private String title;
+    private String yAxisLabel;
+    private String xAxisLabel;
+    private String[] dates;
 
-    //SAMPLE DATA, delete later
-    private double[] xAxisData = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    private double[] yAxisData = {14.5, 13.8, 12.9, 14.2, 14.0, 13.2, 13.7, 14.2, 15.2, 14.8};
-    private String title = "Average Speed vs. Day";
-    private String yAxisLabel = "Average speed";
-    private String xAxisLabel = "Day";
+    private boolean isBar = true;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,16 +67,16 @@ public class GraphFragment extends Fragment {
      * @param xLabel Parameter 5
      * @return A new instance of fragment GraphFragment.
      */
-    public static GraphFragment newInstance(double[] xData, double[] yData, String t, String yLabel, String xLabel) {
+    public static GraphFragment newInstance(Date[] xData, double[] yData, String t, String yLabel, String xLabel) {
         GraphFragment fragment = new GraphFragment();
         Bundle args = new Bundle();
-        args.putDoubleArray(ARG_PARAM1, xData);
+
+        args.putSerializable(ARG_PARAM1, xData);
         args.putDoubleArray(ARG_PARAM2, yData);
         args.putString(ARG_PARAM3, t);
         args.putString(ARG_PARAM4, yLabel);
         args.putString(ARG_PARAM5, xLabel);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -82,7 +85,7 @@ public class GraphFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             //set instance variables for graph
-            xAxisData = getArguments().getDoubleArray(ARG_PARAM1);
+            xAxisData = (Date[]) getArguments().getSerializable(ARG_PARAM1);
             yAxisData = getArguments().getDoubleArray(ARG_PARAM2);
             title = getArguments().getString(ARG_PARAM3);
             yAxisLabel = getArguments().getString(ARG_PARAM4);
@@ -96,7 +99,7 @@ public class GraphFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_graph, container, false);
 
-        //List of data points obtained from GraphFragment initialization
+        //DataPoint is (Date, double)
         ArrayList<DataPoint> datalist = new ArrayList<DataPoint>();
 
         for(int i = 0; i < xAxisData.length; i++){
@@ -104,32 +107,63 @@ public class GraphFragment extends Fragment {
         }
         DataPoint[] data = new DataPoint[datalist.size()];
         data = datalist.toArray(data);
-        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
 
+        //GRAPH PROPERTIES
         GraphView graph = (GraphView) v.findViewById(R.id.graph);
+        Viewport vp = graph.getViewport();
+        GridLabelRenderer glr = graph.getGridLabelRenderer();
 
         //Style graph
         series.setColor(getResources().getColor(R.color.colorGraph));
         series.setDrawDataPoints(true);
         series.setThickness(8);
-
+      
         graph.setTitle(title);
         graph.setTitleTextSize(60);
         graph.getGridLabelRenderer().setHorizontalAxisTitle(xAxisLabel);
         graph.getGridLabelRenderer().setVerticalAxisTitle(yAxisLabel);
 
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(getMax()*1.10);
+        //set graph boundaries
+        vp.setYAxisBoundsManual(true);
+        vp.setMinY(0);
+        vp.setMaxY(getMax()*1.10);
 
-        graph.getViewport().setXAxisBoundsManual(true);
-        graph.getViewport().setMinX(1);
-        graph.getViewport().setMaxX(8);
+        vp.setXAxisBoundsManual(true);
+        vp.setMinX(xAxisData[0].getTime());
+        vp.setMaxX(xAxisData[4].getTime());
 
-        //scrollable on x axis
-        graph.getViewport().setScrollable(true);
+        //format x axis to show dates
+        glr.setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity()));
+        glr.setNumHorizontalLabels(5);
+        glr.setHorizontalLabelsAngle(135);
+        glr.setLabelsSpace(20);
 
-        graph.addSeries(series);
+        glr.setHumanRounding(false);
+
+        vp.setScrollable(true);
+
+        //Line or Bar graph
+        if(isBar){
+            BarGraphSeries series = new BarGraphSeries<>(data);
+
+            //Style bar graph
+            series.setDrawValuesOnTop(false);
+            series.setColor(Color.rgb(251, 177, 60));
+            series.setSpacing(60);
+
+            graph.addSeries(series);
+
+        } else {
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
+
+            //Style line graph
+            series.setColor(Color.rgb(251, 177, 60));
+            series.setDrawDataPoints(true);
+            series.setThickness(8);
+
+            graph.addSeries(series);
+        }
+
         return v;
     }
 
@@ -171,6 +205,14 @@ public class GraphFragment extends Fragment {
             // Not sure what a good default here would be ?
             return 10;
         }
+    }
+
+    public void toLine(){
+        isBar = false;
+    }
+
+    public void toBar() {
+        isBar = true;
     }
 
     /**

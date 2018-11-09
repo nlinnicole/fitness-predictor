@@ -22,9 +22,11 @@ import com.moomeen.endo2java.model.Workout;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class FitnessActivity extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener {
@@ -59,7 +61,6 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 //        mTextMessage = (TextView) findViewById(R.id.message);
 //        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
 //        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 
         FitnessApplication application = (FitnessApplication)getApplicationContext();
         EndomondoSession session = application.getEndomondoSession();
@@ -122,23 +123,23 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         int size = workouts.size();
         ArrayList<Double> averageSpeedData = new ArrayList<>(size);
         ArrayList<Double> durationData = new ArrayList<>(size);
-        ArrayList<Double> xAxisData = new ArrayList<>(size);
+        ArrayList<Date> xAxisData = new ArrayList<>(size);
 
         /**
          * This disgusting piece of code fills the date that are missing
          * (eg: We display 2018-06-01 even if there was no workout that day)
          */
         DateTime currentTime = workouts.get(0).getStartTime();
-        int j = 0;
         for (int i = 0; i < size; i++) {
             Workout workout = workouts.get(i);
+            //add workout data to respective ArrayLists
             while (!isSameDay(currentTime, workout.getStartTime())) {
                 averageSpeedData.add(Double.valueOf(0));
                 durationData.add(Double.valueOf(0));
-                xAxisData.add(Double.valueOf(j));
+
+                xAxisData.add(currentTime.toDate());
 
                 currentTime = currentTime.plusDays(1);
-                j++;
             }
 
             Double averageSpeed = workout.getSpeedAvg();
@@ -149,7 +150,6 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 
             averageSpeedData.add(averageSpeed.doubleValue());
             durationData.add(Double.valueOf(duration.getStandardMinutes()));
-            xAxisData.add(Double.valueOf(j));
         }
 
         String title = getString(R.string.fitness_graph_average_speed_title);
@@ -160,21 +160,24 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         String yAxisLabel2 = getString(R.string.fitness_graph_duration_axis);
         String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
 
-        GraphFragment graphFragment = GraphFragment.newInstance(toPrimitive(xAxisData),
+        //Create graph 1
+        GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
                                                                 toPrimitive(averageSpeedData),
                                                                 title,
                                                                 yAxisLabel,
                                                                 xAxisLabel);
+        graphFragment.toBar();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commit();
 
-        GraphFragment graphFragment2 = GraphFragment.newInstance(toPrimitive(xAxisData),
+        //Create graph 2
+        GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
                                                                  toPrimitive(durationData),
                                                                  title2,
                                                                  yAxisLabel2,
                                                                  xAxisLabel2);
-
+        graphFragment2.toLine();
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();
         ft2.add(R.id.graphContainer, graphFragment2).commit();
     }
@@ -185,7 +188,16 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         for (int i = 0; i < list.size(); i++) {
             result[i] = list.get(i);
         }
+        return result;
+    }
 
+    //NEED BETTER SOLUTION TO NOT REPEAT CODE
+    private Date[] toDate(ArrayList<Date> list){
+        Date[] result = new Date[list.size()];
+
+        for(int i = 0; i < list.size(); i++){
+            result[i] = list.get(i);
+        }
         return result;
     }
 

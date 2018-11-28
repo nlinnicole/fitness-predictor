@@ -127,8 +127,22 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 
             Log.d("FITPREDLOG", "speed: " + averageSpeed + ", duration: " + duration + ", start: " + startTime);
 
-            averageSpeedData.add(averageSpeed.doubleValue());
-            durationData.add(Double.valueOf(duration.getStandardMinutes()));
+            //Filter data
+            // TODO: Decide on filtering limits
+            if (averageSpeed <= 0 || averageSpeed >= 50){
+                //assume error, automatically set to 0
+                averageSpeedData.add(0.0);
+            } else {
+                averageSpeedData.add(averageSpeed.doubleValue());
+            }
+
+            if(duration.getStandardMinutes() <= 0 || duration.getStandardMinutes() >= 100){
+                //assume error, automatically set to 0
+                durationData.add(0.0);
+            } else {
+                durationData.add(Double.valueOf(duration.getStandardMinutes()));
+            }
+
             xAxisData.add(currentTime.toDate());
             currentTime = currentTime.plusDays(1);
         }

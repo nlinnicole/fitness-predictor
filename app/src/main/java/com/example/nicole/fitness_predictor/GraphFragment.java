@@ -39,16 +39,16 @@ public class GraphFragment extends Fragment {
     private static final String ARG_PARAM3 = "t";
     private static final String ARG_PARAM4 = "yLabel";
     private static final String ARG_PARAM5 = "xLabel";
-    private static final String ARG_PARAM6 = "d";
 
     private Date[] xAxisData;
     private double[] yAxisData;
     private String title;
     private String yAxisLabel;
     private String xAxisLabel;
-    private String[] dates;
 
     private boolean isBar = true;
+
+    private GraphView graph = null;
 
     private OnFragmentInteractionListener mListener;
 
@@ -100,16 +100,10 @@ public class GraphFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_graph, container, false);
 
         //DataPoint is (Date, double)
-        ArrayList<DataPoint> datalist = new ArrayList<DataPoint>();
-
-        for(int i = 0; i < xAxisData.length; i++){
-            datalist.add(new DataPoint (xAxisData[i], yAxisData[i]));
-        }
-        DataPoint[] data = new DataPoint[datalist.size()];
-        data = datalist.toArray(data);
+        DataPoint[] data = toDataPointArray(xAxisData, yAxisData);
 
         //GRAPH PROPERTIES
-        GraphView graph = (GraphView) v.findViewById(R.id.graph);
+        graph = (GraphView) v.findViewById(R.id.graph);
         Viewport vp = graph.getViewport();
         GridLabelRenderer glr = graph.getGridLabelRenderer();
       
@@ -162,29 +156,31 @@ public class GraphFragment extends Fragment {
         return v;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private DataPoint[] toDataPointArray(Date[] xAxis, double[] yAxis){
+        ArrayList<DataPoint> datalist = new ArrayList<DataPoint>();
+
+        for(int i = 0; i < xAxis.length; i++){
+            datalist.add(new DataPoint (xAxis[i], yAxis[i]));
         }
+        DataPoint[] data = new DataPoint[datalist.size()];
+        data = datalist.toArray(data);
+        return data;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
+    public void addSeries(Date[] xdata, double[] y2data){
+        DataPoint[] data = toDataPointArray(xdata, y2data);
+
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
+
+        //Style line graph
+        series.setColor(getResources().getColor(R.color.colorGraph));
+        series.setDrawDataPoints(true);
+        series.setThickness(8);
+
+        graph.addSeries(series);
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
 
     private int getMax() {
         if (yAxisData.length > 0) {
@@ -208,6 +204,30 @@ public class GraphFragment extends Fragment {
 
     public void toBar() {
         isBar = true;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     /**

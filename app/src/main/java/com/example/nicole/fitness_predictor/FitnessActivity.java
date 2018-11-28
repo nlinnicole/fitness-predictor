@@ -21,8 +21,10 @@ import com.moomeen.endo2java.model.Workout;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.w3c.dom.Text;
 
 import java.lang.reflect.Array;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -31,41 +33,18 @@ import java.util.List;
 
 public class FitnessActivity extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener {
 
-    private TextView mTextMessage;
-
-//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-//
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.navigation_home:
-//                    mTextMessage.setText(R.string.title_home);
-//                    return true;
-//                case R.id.navigation_dashboard:
-//                    mTextMessage.setText(R.string.title_dashboard);
-//                    return true;
-//                case R.id.navigation_notifications:
-//                    mTextMessage.setText(R.string.title_notifications);
-//                    return true;
-//            }
-//            return false;
-//        }
-//    };
+    private TextView boldText = null;
+    private TextView displayText = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fitness);
-//
-//        mTextMessage = (TextView) findViewById(R.id.message);
-//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        FitnessApplication application = (FitnessApplication)getApplicationContext();
+        FitnessApplication application = (FitnessApplication) getApplicationContext();
         EndomondoSession session = application.getEndomondoSession();
         EndomondoQueryTask task = new EndomondoQueryTask(session);
-        task.execute((Void)null);
+        task.execute((Void) null);
     }
 
     @Override
@@ -154,34 +133,32 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
             currentTime = currentTime.plusDays(1);
         }
 
-        String title = getString(R.string.fitness_graph_average_speed_title);
-        String yAxisLabel = getString(R.string.fitness_graph_average_speed_axis);
-        String xAxisLabel = getString(R.string.fitness_graph_date_axis);
-
-        String title2 = getString(R.string.fitness_graph_duration_title);
-        String yAxisLabel2 = getString(R.string.fitness_graph_duration_axis);
-        String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
-
-        //Create graph 1
+        //Create average speed graph
         GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
-                                                                toPrimitive(averageSpeedData),
-                                                                title,
-                                                                yAxisLabel,
-                                                                xAxisLabel);
+                toPrimitive(averageSpeedData),
+                "Average Speed per Day",
+                "Average Speed (km/h)",
+                "Day");
         graphFragment.toBar();
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commit();
 
-        //Create graph 2
+        boldText = (TextView) findViewById(R.id.boldText);
+        boldText.setText("Overall Average Speed " + getAverage(averageSpeedData) + "km/h");
+
+        //Create average duration graph
         GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
-                                                                 toPrimitive(durationData),
-                                                                 title2,
-                                                                 yAxisLabel2,
-                                                                 xAxisLabel2);
+                toPrimitive(durationData),
+                "Duration per Day",
+                "Duration (min)",
+                "Day");
         graphFragment2.toLine();
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();
-        ft2.add(R.id.graphContainer, graphFragment2).commit();
+        ft2.add(R.id.graph2Container, graphFragment2).commit();
+
+        boldText = (TextView) findViewById(R.id.bold2Text);
+        boldText.setText("Overall Average Duration " + getAverage(durationData) + "min");
     }
 
     private double[] toPrimitive(ArrayList<Double> list) {
@@ -193,14 +170,30 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         return result;
     }
 
-    //NEED BETTER SOLUTION TO NOT REPEAT CODE
-    private Date[] toDate(ArrayList<Date> list){
+    private Date[] toDate(ArrayList<Date> list) {
         Date[] result = new Date[list.size()];
 
-        for(int i = 0; i < list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             result[i] = list.get(i);
         }
         return result;
+    }
+
+    private double getAverage(ArrayList<Double> list) {
+        double sum = 0;
+        if (!list.isEmpty()) {
+            for (Double value : list) {
+                sum += value;
+            }
+            double avg = sum/list.size();
+            return round(avg);
+        }
+        return sum;
+    }
+
+    private double round(double d){
+        DecimalFormat decimalFormat = new DecimalFormat("###.##");
+        return Double.valueOf(decimalFormat.format(d));
     }
 
     private class EndomondoQueryTask extends AsyncTask<Void, List<Workout>, List<Workout>> {

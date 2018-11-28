@@ -129,14 +129,14 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 
             //Filter data
             // TODO: Decide on filtering limits
-            if (averageSpeed <= 0 || averageSpeed >= 50){
+            if (averageSpeed <= 0 || averageSpeed >= 50) {
                 //assume error, automatically set to 0
                 averageSpeedData.add(0.0);
             } else {
                 averageSpeedData.add(averageSpeed.doubleValue());
             }
 
-            if(duration.getStandardMinutes() <= 0 || duration.getStandardMinutes() >= 100){
+            if (duration.getStandardMinutes() <= 0 || duration.getStandardMinutes() >= 100) {
                 //assume error, automatically set to 0
                 durationData.add(0.0);
             } else {
@@ -146,6 +146,10 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
             xAxisData.add(currentTime.toDate());
             currentTime = currentTime.plusDays(1);
         }
+
+        //Moving Average
+        ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 10);
+        ArrayList<Double> durationMovAvg = getMovingAverage(durationData, 10);
 
         //Create average speed graph
         GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
@@ -157,7 +161,7 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
 
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commitNow();
-        graphFragment.addSeries(toDate(xAxisData),toPrimitive(durationData));
+        graphFragment.addSeries(toDate(xAxisData), toPrimitive(speedMovAvg));
 
         boldText = (TextView) findViewById(R.id.boldText);
         boldText.setText("Overall Average Speed: " + getAverage(averageSpeedData) + "km/h");
@@ -169,8 +173,10 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
                 "Duration (min)",
                 "Day");
         graphFragment2.toLine();
+
         FragmentTransaction ft2 = getFragmentManager().beginTransaction();
         ft2.add(R.id.graph2Container, graphFragment2).commitNow();
+        graphFragment2.addSeries(toDate(xAxisData), toPrimitive(durationMovAvg));
 
         boldText = (TextView) findViewById(R.id.bold2Text);
         boldText.setText("Overall Average Duration: " + getAverage(durationData) + "min");
@@ -200,17 +206,34 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
             for (Double value : list) {
                 sum += value;
             }
-            double avg = sum/list.size();
+            double avg = sum / list.size();
             return round(avg);
         }
         return sum;
     }
 
-    private void getMovingAverage(){
+    private ArrayList<Double> getMovingAverage(ArrayList<Double> list, int size) {
+        ArrayList<Double> result = new ArrayList<Double>();
+        int window = size;
 
+        //moving average offset
+        for (int i = 0; i < window; ++i) {
+            result.add(0.0);
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if ((i + (window-1)) >= 0 && (i + (window-1)) < list.size()) {
+                double sum = 0;
+                for (int j = 0; j < window; j++) {
+                    sum += list.get(i + j);
+                }
+                double avg = sum / window;
+                result.add(round(avg));
+            }
+        }
+        return result;
     }
 
-    private double round(double d){
+    private double round(double d) {
         DecimalFormat decimalFormat = new DecimalFormat("###.##");
         return Double.valueOf(decimalFormat.format(d));
     }

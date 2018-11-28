@@ -174,7 +174,7 @@ public class GraphFragment extends Fragment {
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(data);
 
         //Style line graph
-        series.setColor(getResources().getColor(R.color.colorGraph));
+        series.setColor(getResources().getColor(R.color.colorGraphAccent));
         series.setDrawDataPoints(true);
         series.setThickness(8);
 

@@ -29,7 +29,7 @@
             android:name=".RegistrationActivity"
             android:label="Registration"></activity>
         <activity
-            android:name=".FitnessActivity"
+            android:name=".FitnessFragment"
             android:label="@string/title_activity_fitness"></activity>
         <activity
             android:name=".WeatherGrapher"

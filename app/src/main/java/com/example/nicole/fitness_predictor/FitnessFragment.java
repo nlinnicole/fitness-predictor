@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.moomeen.endo2java.EndomondoSession;
 import com.moomeen.endo2java.error.InvocationException;
@@ -26,18 +25,17 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class FitnessActivity extends Fragment implements GraphFragment.OnFragmentInteractionListener {
+public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
-    public static FitnessActivity newInstance() {
+    public static FitnessFragment newInstance() {
         Bundle args = new Bundle();
-        FitnessActivity fragment = new FitnessActivity();
+        FitnessFragment fragment = new FitnessFragment();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View  view = inflater.inflate(R.layout.activity_fitness,null);
 
         FitnessApplication application = (FitnessApplication)getActivity().getApplicationContext();
@@ -49,9 +47,7 @@ public class FitnessActivity extends Fragment implements GraphFragment.OnFragmen
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
+    public void onFragmentInteraction(Uri uri) { }
 
     private boolean isSameDay(DateTime a, DateTime b) {
         boolean isSameYear = a.getYear() == b.getYear();

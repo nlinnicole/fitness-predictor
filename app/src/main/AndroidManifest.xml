@@ -20,11 +20,23 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".WeatherLoginActivity"
+            android:label="@string/title_activity_weather_login"></activity>
+        <activity
             android:name=".MainActivity"
             android:label="@string/title_activity_main"></activity>
         <activity
+            android:name=".RegistrationActivity"
+            android:label="Registration"></activity>
+        <activity
             android:name=".FitnessActivity"
             android:label="@string/title_activity_fitness"></activity>
+        <activity
+            android:name=".WeatherGrapher"
+            android:label="WeatherGrapher"></activity>
+        <activity
+            android:name=".WeatherPickerActivity"
+            android:label="WeatherPicker"></activity>
     </application>
 
 </manifest>

@@ -1,7 +1,6 @@
 package com.example.nicole.fitness_predictor;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.AsyncTask;

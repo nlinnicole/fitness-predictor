@@ -34,7 +34,7 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View  view = inflater.inflate(R.layout.activity_weathergrapher,null);
+        View  view = inflater.inflate(R.layout.fragment_weather,null);
 
         /**
          * We display both graph ALWAYS to be consistent with FitnessFragment

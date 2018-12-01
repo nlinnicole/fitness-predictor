@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
      */
     private class PageAdapter extends FragmentPagerAdapter {
         private String tabTitles[] = new String[] {
-                getString(R.string.tab_fitness_activity),
-                getString(R.string.tab_weather_activity),
-                getString(R.string.tab_analysis_activity)
+                getString(R.string.tab_fitness_fragment),
+                getString(R.string.tab_weather_fragment),
+                getString(R.string.tab_analysis_fragment)
         };
         private Context context;
 

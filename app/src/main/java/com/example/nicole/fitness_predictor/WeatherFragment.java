@@ -49,10 +49,12 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
     @Override
     public void onDestroyView() {
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.remove(graphFragment);
-        ft.remove(graphFragment2);
-        graphFragment = null;
-        graphFragment2 = null;
+        if (graphFragment != null) {
+            ft.remove(graphFragment);
+        }
+        if (graphFragment2 != null) {
+            ft.remove(graphFragment2);
+        }
         /**
          * TODO FIXME: I'd rather not allow state loss here, but I'm getting an exception
          */

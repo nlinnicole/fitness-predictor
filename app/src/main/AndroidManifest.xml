@@ -34,9 +34,6 @@
         <activity
             android:name=".WeatherGrapher"
             android:label="WeatherGrapher"></activity>
-        <activity
-            android:name=".WeatherPickerActivity"
-            android:label="WeatherPicker"></activity>
     </application>
 
 </manifest>

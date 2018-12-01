@@ -1,6 +1,7 @@
 package com.example.nicole.fitness_predictor;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -27,6 +28,9 @@ import java.util.List;
 
 public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
+    private GraphFragment graphFragment;
+    private GraphFragment graphFragment2;
+
     public static FitnessFragment newInstance() {
         Bundle args = new Bundle();
         FitnessFragment fragment = new FitnessFragment();
@@ -44,6 +48,20 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         task.execute((Void)null);
 
         return view;
+    }
+
+    @Override
+    public void onDestroyView() {
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.remove(graphFragment);
+        ft.remove(graphFragment2);
+        graphFragment = null;
+        graphFragment2 = null;
+        /**
+         * TODO FIXME: I'd rather not allow state loss here, but I'm getting an exception
+         */
+        ft.commitAllowingStateLoss();
+        super.onDestroyView();
     }
 
     @Override
@@ -139,25 +157,25 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
 
         //Create graph 1
-        GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
+        graphFragment = GraphFragment.newInstance(toDate(xAxisData),
                                                                 toPrimitive(averageSpeedData),
                                                                 title,
                                                                 yAxisLabel,
                                                                 xAxisLabel);
         graphFragment.toBar();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.graphContainer, graphFragment).commit();
-
         //Create graph 2
-        GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
-                                                                 toPrimitive(durationData),
-                                                                 title2,
-                                                                 yAxisLabel2,
-                                                                 xAxisLabel2);
+        graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
+                toPrimitive(durationData),
+                title2,
+                yAxisLabel2,
+                xAxisLabel2);
         graphFragment2.toLine();
-        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
-        ft2.add(R.id.graphContainer, graphFragment2).commit();
+
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.add(R.id.graphContainer, graphFragment);
+        ft.add(R.id.graphContainer, graphFragment2);
+        ft.commit();
     }
 
     private double[] toPrimitive(ArrayList<Double> list) {

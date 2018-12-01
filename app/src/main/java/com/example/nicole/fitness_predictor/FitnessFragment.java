@@ -1,19 +1,16 @@
 package com.example.nicole.fitness_predictor;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Space;
-import android.widget.TextView;
+import android.view.ViewGroup;
 
 import com.moomeen.endo2java.EndomondoSession;
 import com.moomeen.endo2java.error.InvocationException;
@@ -22,56 +19,52 @@ import com.moomeen.endo2java.model.Workout;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class FitnessActivity extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener {
+public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
-    private TextView mTextMessage;
+    private GraphFragment graphFragment;
+    private GraphFragment graphFragment2;
 
-//    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-//            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-//
-//        @Override
-//        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-//            switch (item.getItemId()) {
-//                case R.id.navigation_home:
-//                    mTextMessage.setText(R.string.title_home);
-//                    return true;
-//                case R.id.navigation_dashboard:
-//                    mTextMessage.setText(R.string.title_dashboard);
-//                    return true;
-//                case R.id.navigation_notifications:
-//                    mTextMessage.setText(R.string.title_notifications);
-//                    return true;
-//            }
-//            return false;
-//        }
-//    };
+    public static FitnessFragment newInstance() {
+        Bundle args = new Bundle();
+        FitnessFragment fragment = new FitnessFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fitness);
-//
-//        mTextMessage = (TextView) findViewById(R.id.message);
-//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View  view = inflater.inflate(R.layout.fragment_fitness,null);
 
-        FitnessApplication application = (FitnessApplication)getApplicationContext();
+        FitnessApplication application = (FitnessApplication)getActivity().getApplicationContext();
         EndomondoSession session = application.getEndomondoSession();
         EndomondoQueryTask task = new EndomondoQueryTask(session);
         task.execute((Void)null);
+
+        return view;
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onDestroyView() {
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.remove(graphFragment);
+        ft.remove(graphFragment2);
+        graphFragment = null;
+        graphFragment2 = null;
+        /**
+         * TODO FIXME: I'd rather not allow state loss here, but I'm getting an exception
+         */
+        ft.commitAllowingStateLoss();
+        super.onDestroyView();
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) { }
 
     private boolean isSameDay(DateTime a, DateTime b) {
         boolean isSameYear = a.getYear() == b.getYear();
@@ -163,25 +156,25 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
 
         //Create graph 1
-        GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
+        graphFragment = GraphFragment.newInstance(toDate(xAxisData),
                                                                 toPrimitive(averageSpeedData),
                                                                 title,
                                                                 yAxisLabel,
                                                                 xAxisLabel);
         graphFragment.toBar();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.add(R.id.graphContainer, graphFragment).commit();
-
         //Create graph 2
-        GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
-                                                                 toPrimitive(durationData),
-                                                                 title2,
-                                                                 yAxisLabel2,
-                                                                 xAxisLabel2);
+        graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
+                toPrimitive(durationData),
+                title2,
+                yAxisLabel2,
+                xAxisLabel2);
         graphFragment2.toLine();
-        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
-        ft2.add(R.id.graphContainer, graphFragment2).commit();
+
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.add(R.id.graphContainer, graphFragment);
+        ft.add(R.id.graphContainer, graphFragment2);
+        ft.commit();
     }
 
     private double[] toPrimitive(ArrayList<Double> list) {

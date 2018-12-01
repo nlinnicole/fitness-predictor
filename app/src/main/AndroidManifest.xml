@@ -3,15 +3,17 @@
     package="com.example.nicole.fitness_predictor">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:name="com.example.nicole.fitness_predictor.FitnessApplication"
+        android:name=".FitnessApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginActivity"
+        <activity
+            android:name=".LoginActivity"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,22 +23,13 @@
         </activity>
         <activity
             android:name=".WeatherLoginActivity"
-            android:label="@string/title_activity_weather_login"></activity>
+            android:label="@string/title_activity_weather_login" />
         <activity
             android:name=".MainActivity"
-            android:label="@string/title_activity_main"></activity>
+            android:label="@string/title_activity_main" />
         <activity
             android:name=".RegistrationActivity"
-            android:label="Registration"></activity>
-        <activity
-            android:name=".FitnessActivity"
-            android:label="@string/title_activity_fitness"></activity>
-        <activity
-            android:name=".WeatherGrapher"
-            android:label="WeatherGrapher"></activity>
-        <activity
-            android:name=".WeatherPickerActivity"
-            android:label="WeatherPicker"></activity>
+            android:label="Registration" />
     </application>
 
 </manifest>

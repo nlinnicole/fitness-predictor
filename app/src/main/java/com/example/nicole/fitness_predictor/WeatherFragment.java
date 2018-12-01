@@ -26,7 +26,7 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
     private GraphFragment graphFragment;
     private GraphFragment graphFragment2;
 
-    public static WeatherFragment newInstance(graphType type) {
+    public static WeatherFragment newInstance() {
         Bundle args = new Bundle();
         WeatherFragment fragment = new WeatherFragment();
         fragment.setArguments(args);

@@ -60,9 +60,7 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
                 case 0:
                     return FitnessFragment.newInstance();
                 case 1:
-                    return WeatherGrapher.newInstance(WeatherGrapher.graphType.AVG_TEMP);
-                case 2:
-                    return WeatherGrapher.newInstance(WeatherGrapher.graphType.WIND_SPEED);
+                    return WeatherFragment.newInstance();
                 default:
                     return FitnessFragment.newInstance();
             }

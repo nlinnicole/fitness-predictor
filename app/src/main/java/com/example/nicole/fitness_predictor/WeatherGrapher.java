@@ -135,8 +135,10 @@ public class WeatherGrapher extends Fragment implements GraphFragment.OnFragment
         switch(chosenType) {
             case AVG_TEMP:
                 graphAvgTemp(dates, yAxis);
+                break;
             case WIND_SPEED:
                 graphWindSpeed(dates,yAxis);
+                break;
         }
 
     }

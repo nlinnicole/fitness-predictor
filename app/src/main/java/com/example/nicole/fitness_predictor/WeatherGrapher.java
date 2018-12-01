@@ -27,14 +27,11 @@ public class WeatherGrapher extends Fragment implements GraphFragment.OnFragment
     }
 
     private GraphFragment graphFragment;
-
-    private graphType chosenGraphType = graphType.NONE;
+    private GraphFragment graphFragment2;
 
     public static WeatherGrapher newInstance(graphType type) {
         Bundle args = new Bundle();
-        args.putSerializable("chosenGraphType", type);
         WeatherGrapher fragment = new WeatherGrapher();
-        fragment.setChosenGraphType(type);
         fragment.setArguments(args);
         return fragment;
     }
@@ -42,16 +39,13 @@ public class WeatherGrapher extends Fragment implements GraphFragment.OnFragment
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View  view = inflater.inflate(R.layout.activity_weathergrapher,null);
-        // chosenGraphType = (graphType) savedInstanceState.getSerializable("chosenGraphType");
 
-        // mTextMessage = (TextView) findViewById(R.id.message);
-        // BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-        // navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        /**
+         * We display both graph ALWAYS to be consistent with FitnessFragment
+         */
+        weatherDataReader(graphType.AVG_TEMP);
+        weatherDataReader(graphType.WIND_SPEED);
 
-        //????????
-        //WeatherGrapher application = (WeatherGrapher)getApplicationContext();
-
-        weatherDataReader(chosenGraphType);
         return view;
     }
 
@@ -60,7 +54,9 @@ public class WeatherGrapher extends Fragment implements GraphFragment.OnFragment
     public void onDestroyView() {
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.remove(graphFragment);
+        ft.remove(graphFragment2);
         graphFragment = null;
+        graphFragment2 = null;
         /**
          * TODO FIXME: I'd rather not allow state loss here, but I'm getting an exception
          */
@@ -70,10 +66,6 @@ public class WeatherGrapher extends Fragment implements GraphFragment.OnFragment
 
     @Override
     public void onFragmentInteraction(Uri uri) { }
-
-    public void setChosenGraphType(graphType type) {
-        chosenGraphType = type;
-    }
 
     public String loadJSONFromAsset() {
         String json = null;
@@ -174,15 +166,15 @@ public class WeatherGrapher extends Fragment implements GraphFragment.OnFragment
         String xAxisLabel = "Day";
 
         //Create graph 1
-        graphFragment = GraphFragment.newInstance(toDate(dates),
+        graphFragment2 = GraphFragment.newInstance(toDate(dates),
                 toPrimitive(avgTemps),
                 title,
                 yAxisLabel,
                 xAxisLabel);
-        graphFragment.toLine();
+        graphFragment2.toLine();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.add(R.id.graphWeatherContainer, graphFragment).commit();
+        ft.add(R.id.graphWeatherContainer, graphFragment2).commit();
 
     }
 

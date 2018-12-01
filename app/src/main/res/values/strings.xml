@@ -7,6 +7,7 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity_login">Log in</string>
+    <string name="title_activity_weather_login">Log in</string>
     <string name="title_activity_main">Dashboard</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -22,4 +23,10 @@
     <string name="fitness_graph_date_axis">Day</string>
     <string name="fitness_graph_average_speed_axis">Average Speed (km/h)</string>
     <string name="fitness_graph_duration_axis">Duration (min)</string>
+
+    <string name="tab_fitness_fragment">Fitness</string>
+    <string name="tab_weather_fragment">Weather</string>
+    <string name="tab_analysis_fragment">Analysis</string>
+
+    <string name="action_logout">Log out</string>
 </resources>

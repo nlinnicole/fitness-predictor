@@ -1,18 +1,16 @@
 package com.example.nicole.fitness_predictor;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Space;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.moomeen.endo2java.EndomondoSession;
@@ -23,7 +21,6 @@ import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.w3c.dom.Text;
 
-import java.lang.reflect.Array;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,26 +28,50 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class FitnessActivity extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener {
+public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
     private TextView boldText = null;
     private TextView displayText = null;
+    private GraphFragment graphFragment;
+    private GraphFragment graphFragment2;
+
+    public static FitnessFragment newInstance() {
+        Bundle args = new Bundle();
+        FitnessFragment fragment = new FitnessFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fitness);
+//        setContentView(R.layout.activity_fitness);
+        View  view = inflater.inflate(R.layout.fragment_fitness,null);
 
-        FitnessApplication application = (FitnessApplication) getApplicationContext();
+        FitnessApplication application = (FitnessApplication)getActivity().getApplicationContext();
         EndomondoSession session = application.getEndomondoSession();
         EndomondoQueryTask task = new EndomondoQueryTask(session);
-        task.execute((Void) null);
+        task.execute((Void)null);
+
+        return view;
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onDestroyView() {
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.remove(graphFragment);
+        ft.remove(graphFragment2);
+        graphFragment = null;
+        graphFragment2 = null;
+        /**
+         * TODO FIXME: I'd rather not allow state loss here, but I'm getting an exception
+         */
+        ft.commitAllowingStateLoss();
+        super.onDestroyView();
     }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) { }
 
     private boolean isSameDay(DateTime a, DateTime b) {
         boolean isSameYear = a.getYear() == b.getYear();
@@ -163,7 +184,7 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         ft.add(R.id.graphContainer, graphFragment).commitNow();
         graphFragment.addSeries(toDate(xAxisData), toPrimitive(speedMovAvg));
 
-        boldText = (TextView) findViewById(R.id.boldText);
+        boldText = (TextView) getView().findViewById(R.id.boldText);
         boldText.setText("Overall Average Speed: " + getAverage(averageSpeedData) + "km/h");
 
         //Create average duration graph
@@ -178,8 +199,9 @@ public class FitnessActivity extends AppCompatActivity implements GraphFragment.
         ft2.add(R.id.graph2Container, graphFragment2).commitNow();
         graphFragment2.addSeries(toDate(xAxisData), toPrimitive(durationMovAvg));
 
-        boldText = (TextView) findViewById(R.id.bold2Text);
+        boldText = (TextView) getView().findViewById(R.id.bold2Text);
         boldText.setText("Overall Average Duration: " + getAverage(durationData) + "min");
+
     }
 
     private double[] toPrimitive(ArrayList<Double> list) {

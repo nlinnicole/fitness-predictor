@@ -26,16 +26,19 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
-
-        // startActivity(intent);
     }
 
+    @Override
     public void onFragmentInteraction(Uri uri) { }
 
+    /**
+     * The PageAdapter handles the fragments to show (So the tabs)
+     */
     private class PageAdapter extends FragmentPagerAdapter {
         private String tabTitles[] = new String[] {
                 getString(R.string.tab_fitness_activity),
-                getString(R.string.tab_weather_activity)
+                getString(R.string.tab_weather_activity),
+                getString(R.string.tab_analysis_activity)
         };
         private Context context;
 
@@ -61,6 +64,8 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
                     return FitnessFragment.newInstance();
                 case 1:
                     return WeatherFragment.newInstance();
+                case 2:
+                    return AnalysisFragment.newInstance("Param 1");
                 default:
                     return FitnessFragment.newInstance();
             }

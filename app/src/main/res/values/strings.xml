@@ -26,6 +26,7 @@
 
     <string name="tab_fitness_activity">Fitness</string>
     <string name="tab_weather_activity">Weather</string>
+    <string name="tab_analysis_activity">Analysis</string>
 
     <string name="action_logout">Log out</string>
 </resources>

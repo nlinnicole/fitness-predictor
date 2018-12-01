@@ -5,13 +5,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
-import com.moomeen.endo2java.EndomondoSession;
 
 import org.json.JSONObject;
 
@@ -19,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.io.InputStream;
 
-public class WeatherGrapher extends Fragment implements GraphFragment.OnFragmentInteractionListener  {
+public class WeatherFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener  {
     public enum graphType {
         AVG_TEMP,
         WIND_SPEED,
@@ -29,9 +26,9 @@ public class WeatherGrapher extends Fragment implements GraphFragment.OnFragment
     private GraphFragment graphFragment;
     private GraphFragment graphFragment2;
 
-    public static WeatherGrapher newInstance(graphType type) {
+    public static WeatherFragment newInstance(graphType type) {
         Bundle args = new Bundle();
-        WeatherGrapher fragment = new WeatherGrapher();
+        WeatherFragment fragment = new WeatherFragment();
         fragment.setArguments(args);
         return fragment;
     }

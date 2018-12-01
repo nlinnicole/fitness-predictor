@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.moomeen.endo2java.EndomondoSession;
 import com.moomeen.endo2java.error.InvocationException;
@@ -18,7 +19,9 @@ import com.moomeen.endo2java.model.Workout;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
+import org.w3c.dom.Text;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -27,6 +30,8 @@ import java.util.List;
 
 public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
+    private TextView boldText = null;
+    private TextView displayText = null;
     private GraphFragment graphFragment;
     private GraphFragment graphFragment2;
 
@@ -39,6 +44,8 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_fitness);
         View  view = inflater.inflate(R.layout.fragment_fitness,null);
 
         FitnessApplication application = (FitnessApplication)getActivity().getApplicationContext();
@@ -141,40 +148,60 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
 
             Log.d("FITPREDLOG", "speed: " + averageSpeed + ", duration: " + duration + ", start: " + startTime);
 
-            averageSpeedData.add(averageSpeed.doubleValue());
-            durationData.add(Double.valueOf(duration.getStandardMinutes()));
+            //Filter data
+            // TODO: Decide on filtering limits
+            if (averageSpeed <= 0 || averageSpeed >= 50) {
+                //assume error, automatically set to 0
+                averageSpeedData.add(0.0);
+            } else {
+                averageSpeedData.add(averageSpeed.doubleValue());
+            }
+
+            if (duration.getStandardMinutes() <= 0 || duration.getStandardMinutes() >= 100) {
+                //assume error, automatically set to 0
+                durationData.add(0.0);
+            } else {
+                durationData.add(Double.valueOf(duration.getStandardMinutes()));
+            }
+
             xAxisData.add(currentTime.toDate());
             currentTime = currentTime.plusDays(1);
         }
 
-        String title = getString(R.string.fitness_graph_average_speed_title);
-        String yAxisLabel = getString(R.string.fitness_graph_average_speed_axis);
-        String xAxisLabel = getString(R.string.fitness_graph_date_axis);
+        //Moving Average
+        ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 10);
+        ArrayList<Double> durationMovAvg = getMovingAverage(durationData, 10);
 
-        String title2 = getString(R.string.fitness_graph_duration_title);
-        String yAxisLabel2 = getString(R.string.fitness_graph_duration_axis);
-        String xAxisLabel2 = getString(R.string.fitness_graph_date_axis);
-
-        //Create graph 1
-        graphFragment = GraphFragment.newInstance(toDate(xAxisData),
-                                                                toPrimitive(averageSpeedData),
-                                                                title,
-                                                                yAxisLabel,
-                                                                xAxisLabel);
+        //Create average speed graph
+        GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
+                toPrimitive(averageSpeedData),
+                "Average Speed per Day",
+                "Average Speed (km/h)",
+                "Day");
         graphFragment.toBar();
 
-        //Create graph 2
-        graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.add(R.id.graphContainer, graphFragment).commitNow();
+        graphFragment.addSeries(toDate(xAxisData), toPrimitive(speedMovAvg));
+
+        boldText = (TextView) getView().findViewById(R.id.boldText);
+        boldText.setText("Overall Average Speed: " + getAverage(averageSpeedData) + "km/h");
+
+        //Create average duration graph
+        GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
                 toPrimitive(durationData),
-                title2,
-                yAxisLabel2,
-                xAxisLabel2);
+                "Duration per Day",
+                "Duration (min)",
+                "Day");
         graphFragment2.toLine();
 
-        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.add(R.id.graphContainer, graphFragment);
-        ft.add(R.id.graphContainer, graphFragment2);
-        ft.commit();
+        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+        ft2.add(R.id.graph2Container, graphFragment2).commitNow();
+        graphFragment2.addSeries(toDate(xAxisData), toPrimitive(durationMovAvg));
+
+        boldText = (TextView) getView().findViewById(R.id.bold2Text);
+        boldText.setText("Overall Average Duration: " + getAverage(durationData) + "min");
+
     }
 
     private double[] toPrimitive(ArrayList<Double> list) {
@@ -186,14 +213,51 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return result;
     }
 
-    //NEED BETTER SOLUTION TO NOT REPEAT CODE
-    private Date[] toDate(ArrayList<Date> list){
+    private Date[] toDate(ArrayList<Date> list) {
         Date[] result = new Date[list.size()];
 
-        for(int i = 0; i < list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             result[i] = list.get(i);
         }
         return result;
+    }
+
+    private double getAverage(ArrayList<Double> list) {
+        double sum = 0;
+        if (!list.isEmpty()) {
+            for (Double value : list) {
+                sum += value;
+            }
+            double avg = sum / list.size();
+            return round(avg);
+        }
+        return sum;
+    }
+
+    private ArrayList<Double> getMovingAverage(ArrayList<Double> list, int size) {
+        ArrayList<Double> result = new ArrayList<Double>();
+        int window = size;
+
+        //moving average offset
+        for (int i = 0; i < window; ++i) {
+            result.add(0.0);
+        }
+        for (int i = 0; i < list.size(); i++) {
+            if ((i + (window-1)) >= 0 && (i + (window-1)) < list.size()) {
+                double sum = 0;
+                for (int j = 0; j < window; j++) {
+                    sum += list.get(i + j);
+                }
+                double avg = sum / window;
+                result.add(round(avg));
+            }
+        }
+        return result;
+    }
+
+    private double round(double d) {
+        DecimalFormat decimalFormat = new DecimalFormat("###.##");
+        return Double.valueOf(decimalFormat.format(d));
     }
 
     private class EndomondoQueryTask extends AsyncTask<Void, List<Workout>, List<Workout>> {

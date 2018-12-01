@@ -1,0 +1,114 @@
+{
+	"25/10/18":
+	{
+		"Max Temp": 3.0,
+		"Min Temp": -0.6,
+		"Avg Temp": 1.2,
+		"Wind Speed": 39
+	},
+	
+	"26/10/18":
+	{
+		"Max Temp": 5.4,
+		"Min Temp": -6.4,
+		"Avg Temp": -0.5,
+		"Wind Speed": 39
+	},
+	
+	"27/10/18":
+	{
+		"Max Temp": 5.4,
+		"Min Temp": -5.6,
+		"Avg Temp": -0.1,
+		"Wind Speed": 50
+	},
+	
+	"28/10/18":
+	{
+		"Max Temp": 5.1,
+		"Min Temp": 0.4,
+		"Avg Temp": 2.8,
+		"Wind Speed": 50
+	},
+	
+	"29/10/18":
+	{
+		"Max Temp": 7.5,
+		"Min Temp": 2.8,
+		"Avg Temp": 5.2,
+		"Wind Speed": 37
+	},
+	
+	"30/10/18":
+	{
+		"Max Temp": 4.7,
+		"Min Temp": -2.9,
+		"Avg Temp": 0.9,
+		"Wind Speed": 37
+	},
+	
+	"31/10/18":
+	{
+		"Max Temp": 4.6,
+		"Min Temp": -2.1,
+		"Avg Temp": 1.3,
+		"Wind Speed": 0
+	},
+	
+	"01/11/18":
+	{
+		"Max Temp": 7.9,
+		"Min Temp": 4.1,
+		"Avg Temp": 6.0,
+		"Wind Speed": 0
+	},
+	
+	"02/11/18":
+	{
+		"Max Temp": 5.1,
+		"Min Temp": 3.2,
+		"Avg Temp": 4.2,
+		"Wind Speed": 50
+	},
+	
+	"03/11/18":
+	{
+		"Max Temp": 5.1,
+		"Min Temp": 2.2,
+		"Avg Temp": 3.7,
+		"Wind Speed": 74
+	},
+	
+	"04/11/18":
+	{
+		"Max Temp": 6.7,
+		"Min Temp": -1.7,
+		"Avg Temp": 2.5,
+		"Wind Speed": 42
+	},
+	
+	"05/11/18":
+	{
+		"Max Temp": 5.4,
+		"Min Temp": -1.9,
+		"Avg Temp": 1.8,
+		"Wind Speed": 0
+	},
+	
+	"06/11/18":
+	{
+		"Max Temp": 11.1,
+		"Min Temp": 5.3,
+		"Avg Temp": 8.2,
+		"Wind Speed": 58
+	},
+	
+	"07/11/18":
+	{
+		"Max Temp": 12.5,
+		"Min Temp": 6.2,
+		"Avg Temp": 9.4,
+		"Wind Speed": 78
+	}
+
+}

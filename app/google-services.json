@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "6627046396",
+    "firebase_url": "https://loginweather-e282f.firebaseio.com",
+    "project_id": "loginweather-e282f",
+    "storage_bucket": "loginweather-e282f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:6627046396:android:463caca94dcad136",
+        "android_client_info": {
+          "package_name": "com.example.nicole.fitness_predictor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "6627046396-koq5lq41faggpt0mvm2ijcdgashrn90v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB4q5XturiIRgud4jgz3G4e61JYabqOZU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

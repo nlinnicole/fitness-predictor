@@ -1,64 +1,75 @@
 package com.example.nicole.fitness_predictor;
 
-
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Space;
-import android.widget.TextView;
+import android.view.ViewGroup;
+
 
 import com.moomeen.endo2java.EndomondoSession;
-import com.moomeen.endo2java.error.InvocationException;
-import com.moomeen.endo2java.model.Workout;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
-import java.util.List;
 import java.io.InputStream;
 
-public class WeatherGrapher extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener  {
+public class WeatherGrapher extends Fragment implements GraphFragment.OnFragmentInteractionListener  {
     public enum graphType {
         AVG_TEMP,
         WIND_SPEED,
         NONE
     }
-    static graphType chosenGraphType = graphType.NONE;
+
+    private GraphFragment graphFragment;
+
+    private graphType chosenGraphType = graphType.NONE;
+
+    public static WeatherGrapher newInstance(graphType type) {
+        Bundle args = new Bundle();
+        args.putSerializable("chosenGraphType", type);
+        WeatherGrapher fragment = new WeatherGrapher();
+        fragment.setChosenGraphType(type);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_weathergrapher);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View  view = inflater.inflate(R.layout.activity_weathergrapher,null);
+        // chosenGraphType = (graphType) savedInstanceState.getSerializable("chosenGraphType");
 
-
-//        mTextMessage = (TextView) findViewById(R.id.message);
-//        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        // mTextMessage = (TextView) findViewById(R.id.message);
+        // BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        // navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         //????????
         //WeatherGrapher application = (WeatherGrapher)getApplicationContext();
+
         weatherDataReader(chosenGraphType);
+        return view;
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
+        ft.remove(graphFragment);
+        graphFragment = null;
+        /**
+         * TODO FIXME: I'd rather not allow state loss here, but I'm getting an exception
+         */
+        ft.commitAllowingStateLoss();
+        super.onDestroyView();
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
-    }
+    public void onFragmentInteraction(Uri uri) { }
 
     public void setChosenGraphType(graphType type) {
         chosenGraphType = type;
@@ -67,7 +78,7 @@ public class WeatherGrapher extends AppCompatActivity implements GraphFragment.O
     public String loadJSONFromAsset() {
         String json = null;
         try {
-            InputStream is = getAssets().open("weatherData.json");
+            InputStream is = getActivity().getAssets().open("weatherData.json");
             int size = is.available();
             byte[] buffer = new byte[size];
             is.read(buffer);
@@ -140,14 +151,14 @@ public class WeatherGrapher extends AppCompatActivity implements GraphFragment.O
         String xAxisLabel = "Day";
 
         //Create graph 1
-        GraphFragment graphFragment = GraphFragment.newInstance(toDate(dates),
+        graphFragment = GraphFragment.newInstance(toDate(dates),
                 toPrimitive(windSpeeds),
                 title,
                 yAxisLabel,
                 xAxisLabel);
         graphFragment.toLine();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.add(R.id.graphWeatherContainer, graphFragment).commit();
     }
 
@@ -161,14 +172,14 @@ public class WeatherGrapher extends AppCompatActivity implements GraphFragment.O
         String xAxisLabel = "Day";
 
         //Create graph 1
-        GraphFragment graphFragment = GraphFragment.newInstance(toDate(dates),
+        graphFragment = GraphFragment.newInstance(toDate(dates),
                 toPrimitive(avgTemps),
                 title,
                 yAxisLabel,
                 xAxisLabel);
         graphFragment.toLine();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.add(R.id.graphWeatherContainer, graphFragment).commit();
 
     }

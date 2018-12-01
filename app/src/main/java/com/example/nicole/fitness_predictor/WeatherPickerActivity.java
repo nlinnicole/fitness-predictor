@@ -22,8 +22,9 @@ public class WeatherPickerActivity extends AppCompatActivity {
             {
 
                 //Opens avg temp graph activity
-                WeatherGrapher.chosenGraphType = WeatherGrapher.graphType.AVG_TEMP;
+                WeatherGrapher.graphType type = WeatherGrapher.graphType.AVG_TEMP;
                 Intent intent = new Intent(getApplicationContext(), WeatherGrapher.class);
+                intent.putExtra("chosenGraphType", type);
                 startActivity(intent);
                 //If it isn't necessary to open the graph in a new activity then you can place the method here
                 //getAvgTemperature()
@@ -35,8 +36,10 @@ public class WeatherPickerActivity extends AppCompatActivity {
             {
 
                 //Opens avg wind speed graph activity
-                WeatherGrapher.chosenGraphType = WeatherGrapher.graphType.WIND_SPEED;
+
+                WeatherGrapher.graphType type = WeatherGrapher.graphType.WIND_SPEED;
                 Intent intent = new Intent(getApplicationContext(), WeatherGrapher.class);
+                intent.putExtra("chosenGraphType", type);
                 startActivity(intent);
                 //If it isn't necessary to open the graph in a new activity then you can place the method here
                 //getAvgWindSpeed();

@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorGraph">#FF4081</color>
-    <color name="colorGraphAccent">#FFED03</color>
+    <color name="colorGraphAccent">#FDD835</color>
+    <color name="colorGraphFill">#F6F67D</color>
 </resources>

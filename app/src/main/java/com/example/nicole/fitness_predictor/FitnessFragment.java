@@ -31,9 +31,12 @@ import java.util.List;
 public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
     private TextView boldText = null;
-    private TextView displayText = null;
     private GraphFragment graphFragment;
     private GraphFragment graphFragment2;
+
+    private TextView graphTitle1 = null;
+    private TextView graphTitle2 = null;
+
 
     public static FitnessFragment newInstance() {
         Bundle args = new Bundle();
@@ -171,39 +174,44 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         }
 
         //Moving Average
-        ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 10);
-        ArrayList<Double> durationMovAvg = getMovingAverage(durationData, 10);
+        ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 3);
+        ArrayList<Double> durationMovAvg = getMovingAverage(durationData, 3);
 
         //Create average speed graph
-        GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
+        graphFragment = GraphFragment.newInstance(toDate(xAxisData),
                 toPrimitive(averageSpeedData),
                 "Average Speed per Day",
                 "Average Speed (km/h)",
                 "Day");
         graphFragment.toBar();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commitNow();
         graphFragment.addSeries(toDate(xAxisData), toPrimitive(speedMovAvg));
 
-        boldText = (TextView) getView().findViewById(R.id.boldText);
+        boldText = getView().findViewById(R.id.avgText);
         boldText.setText("Overall Average Speed: " + getAverage(averageSpeedData) + "km/h");
 
+        graphTitle1 = getView().findViewById(R.id.graphTitle);
+        graphTitle1.setText("Average Speed per Day");
+
         //Create average duration graph
-        GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
+        graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
                 toPrimitive(durationData),
                 "Duration per Day",
                 "Duration (min)",
                 "Day");
         graphFragment2.toLine();
 
-        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+        FragmentTransaction ft2 = getChildFragmentManager().beginTransaction();
         ft2.add(R.id.graph2Container, graphFragment2).commitNow();
         graphFragment2.addSeries(toDate(xAxisData), toPrimitive(durationMovAvg));
 
-        boldText = (TextView) getView().findViewById(R.id.bold2Text);
-        boldText.setText("Overall Average Duration: " + getAverage(durationData) + "min");
+        graphTitle2 = getView().findViewById(R.id.graphTitle2);
+        graphTitle2.setText("Duration per Day");
 
+        boldText = getView().findViewById(R.id.avgText2);
+        boldText.setText("Overall Average Duration: " + getAverage(durationData) + "min");
     }
 
     private double[] toPrimitive(ArrayList<Double> list) {

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.io.InputStream;
 
-public class WeatherFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener  {
+public class WeatherFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
     public enum graphType {
         AVG_TEMP,
         WIND_SPEED,
@@ -24,6 +25,9 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
 
     private GraphFragment graphFragment;
     private GraphFragment graphFragment2;
+
+    private TextView graphTitle1 = null;
+    private TextView graphTitle2 = null;
 
     public static WeatherFragment newInstance() {
         Bundle args = new Bundle();
@@ -34,7 +38,8 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View  view = inflater.inflate(R.layout.fragment_weather,null);
+        super.onCreate(savedInstanceState);
+        View view = inflater.inflate(R.layout.fragment_weather, null);
 
         /**
          * We display both graph ALWAYS to be consistent with FitnessFragment
@@ -44,7 +49,6 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
 
         return view;
     }
-
 
     @Override
     public void onDestroyView() {
@@ -63,7 +67,8 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) { }
+    public void onFragmentInteraction(Uri uri) {
+    }
 
     public String loadJSONFromAsset() {
         String json = null;
@@ -78,7 +83,6 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
             ex.printStackTrace();
             return null;
         }
-
         return json;
     }
 
@@ -86,7 +90,7 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
         ArrayList<Date> dates = new ArrayList<>();
         ArrayList<Double> yAxis = new ArrayList<>();
         String chosenY = "";
-        switch(chosenType) {
+        switch (chosenType) {
             case AVG_TEMP:
                 chosenY = "Avg Temp";
                 break;
@@ -99,40 +103,35 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
         JSONObject reader = null;
         try {
             reader = new JSONObject(in);
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-
         Date currentDate = new Date(118, 9, 25);
-        for(int i = 0; i < 14; ++i)
-        {
+        for (int i = 0; i < 14; ++i) {
             try {
                 String dateInString;
-                if(currentDate.getDate()<10)
-                    dateInString = "0" + currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + (currentDate.getYear() -100);
+                if (currentDate.getDate() < 10)
+                    dateInString = "0" + currentDate.getDate() + "/" + (currentDate.getMonth() + 1) + "/" + (currentDate.getYear() - 100);
                 else
-                    dateInString = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + (currentDate.getYear() -100);
+                    dateInString = currentDate.getDate() + "/" + (currentDate.getMonth() + 1) + "/" + (currentDate.getYear() - 100);
                 JSONObject jsonObject = reader.getJSONObject(dateInString);
-                dates.add(new Date(currentDate.getYear(), currentDate.getMonth(),currentDate.getDate()));
+                dates.add(new Date(currentDate.getYear(), currentDate.getMonth(), currentDate.getDate()));
                 yAxis.add(jsonObject.getDouble(chosenY));
                 currentDate.setDate(currentDate.getDate() + 1);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 return;
             }
         }
-        System.out.println(dates);
-        switch(chosenType) {
+        //System.out.println(dates);
+        switch (chosenType) {
             case AVG_TEMP:
                 graphAvgTemp(dates, yAxis);
                 break;
             case WIND_SPEED:
-                graphWindSpeed(dates,yAxis);
+                graphWindSpeed(dates, yAxis);
                 break;
         }
-
     }
 
     private void graphWindSpeed(ArrayList<Date> dates, ArrayList<Double> windSpeeds) {
@@ -140,20 +139,16 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
             return;
         }
 
-        String title = "Wind Speed";
-        String yAxisLabel = "km/h";
-        String xAxisLabel = "Day";
-
         //Create graph 1
         graphFragment = GraphFragment.newInstance(toDate(dates),
                 toPrimitive(windSpeeds),
-                title,
-                yAxisLabel,
-                xAxisLabel);
+                "Wind Speed",
+                "km/h",
+                "Day");
         graphFragment.toLine();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.add(R.id.graphWeatherContainer, graphFragment).commit();
+        ft.add(R.id.graphContainer, graphFragment).commitNow();
     }
 
     private void graphAvgTemp(ArrayList<Date> dates, ArrayList<Double> avgTemps) {
@@ -161,23 +156,17 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
             return;
         }
 
-        String title = "Average Temperature";
-        String yAxisLabel = "Degrees Celsius";
-        String xAxisLabel = "Day";
-
         //Create graph 1
         graphFragment2 = GraphFragment.newInstance(toDate(dates),
                 toPrimitive(avgTemps),
-                title,
-                yAxisLabel,
-                xAxisLabel);
+                "Average Temperature",
+                "Degrees Celsius",
+                "Day");
         graphFragment2.toLine();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
-        ft.add(R.id.graphWeatherContainer, graphFragment2).commit();
-
+        ft.add(R.id.graph2Container, graphFragment2).commitNow();
     }
-
 
     private double[] toPrimitive(ArrayList<Double> list) {
         double[] result = new double[list.size()];
@@ -188,15 +177,12 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
         return result;
     }
 
-    //NEED BETTER SOLUTION TO NOT REPEAT CODE
-    private Date[] toDate(ArrayList<Date> list){
+    private Date[] toDate(ArrayList<Date> list) {
         Date[] result = new Date[list.size()];
 
-        for(int i = 0; i < list.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             result[i] = list.get(i);
         }
         return result;
     }
-
-
 }

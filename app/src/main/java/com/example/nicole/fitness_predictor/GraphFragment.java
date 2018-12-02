@@ -1,12 +1,14 @@
 package com.example.nicole.fitness_predictor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -101,11 +103,9 @@ public class GraphFragment extends Fragment {
         graph = (GraphView) v.findViewById(R.id.graph);
         Viewport vp = graph.getViewport();
         GridLabelRenderer glr = graph.getGridLabelRenderer();
-      
-        graph.setTitle(title);
-        graph.setTitleTextSize(60);
-        graph.getGridLabelRenderer().setHorizontalAxisTitle(xAxisLabel);
-        graph.getGridLabelRenderer().setVerticalAxisTitle(yAxisLabel);
+
+        //glr.setHorizontalAxisTitle(xAxisLabel);
+        glr.setVerticalAxisTitle(yAxisLabel);
 
         //set graph boundaries
         vp.setYAxisBoundsManual(true);
@@ -162,7 +162,6 @@ public class GraphFragment extends Fragment {
         return data;
     }
 
-
     public void addSeries(Date[] xdata, double[] y2data){
         DataPoint[] data = toDataPointArray(xdata, y2data);
 
@@ -172,6 +171,8 @@ public class GraphFragment extends Fragment {
         series.setColor(getResources().getColor(R.color.colorGraphAccent));
         series.setDrawDataPoints(true);
         series.setThickness(8);
+        series.setBackgroundColor(Color.argb(59, 246, 246, 125));
+        series.setDrawBackground(true);
 
         graph.addSeries(series);
     }

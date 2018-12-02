@@ -26,12 +26,12 @@ import com.moomeen.endo2java.error.LoginException;
 /**
  * A login screen that offers login to Endomondo via email/password.
  *
- * The LoginActivity first tries to login with the credentials in the keystore first. Otherwise it
+ * The FitnessLoginActivity first tries to login with the credentials in the keystore first. Otherwise it
  * displays the login form.
  *
  * Based on Android Studio's Login Activity template
  */
-public class LoginActivity extends AppCompatActivity {
+public class FitnessLoginActivity extends AppCompatActivity {
     /**
      * The only result possible is a success. If you can't login, then you shouldn't be able to go
      * further in the application.
@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_fitness_login);
 
         // Set up the login form.
         emailView = (EditText) findViewById(R.id.email);

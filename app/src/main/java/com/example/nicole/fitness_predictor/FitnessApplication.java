@@ -9,7 +9,7 @@ import com.moomeen.endo2java.EndomondoSession;
  * This class has some global states such as EndomondoSession that can be used across the whole
  * application.
  *
- * Make sure to start the Login Activity whenever the application is restarted. (LoginActivity should
+ * Make sure to start the Login Activity whenever the application is restarted. (FitnessLoginActivity should
  * be the first activity displayed.
  */
 public class FitnessApplication extends Application {

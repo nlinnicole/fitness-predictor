@@ -13,10 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".LoginActivity"
-            android:label="@string/title_activity_login">
-
-        </activity>
+            android:name=".FitnessLoginActivity"
+            android:label="@string/title_activity_fitness_login"/>
         <activity
             android:name=".WeatherLoginActivity"
             android:label="@string/title_activity_weather_login" />

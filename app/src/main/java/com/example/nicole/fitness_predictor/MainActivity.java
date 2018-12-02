@@ -38,14 +38,14 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
     }
 
     private void handleLogin() {
-        Intent endomondoLoginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+        Intent endomondoLoginIntent = new Intent(getApplicationContext(), FitnessLoginActivity.class);
         startActivityForResult(endomondoLoginIntent, REQUEST_ENDOMONDO_LOGIN);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_ENDOMONDO_LOGIN) {
-            if (resultCode == LoginActivity.LOGIN_SUCCESS) {
+            if (resultCode == FitnessLoginActivity.LOGIN_SUCCESS) {
                 Log.d("FITPREDLOG", "Login from Endomondo success");
                 Intent firebaseLoginIntent = new Intent(getApplicationContext(), WeatherLoginActivity.class);
                 startActivityForResult(firebaseLoginIntent, REQUEST_FIREBASE_LOGIN);

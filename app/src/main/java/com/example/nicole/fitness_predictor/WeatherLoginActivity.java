@@ -27,7 +27,7 @@ public class WeatherLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_weather_login);
 
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);

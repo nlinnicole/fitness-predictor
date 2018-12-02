@@ -16,6 +16,7 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener {
     private static final int REQUEST_ENDOMONDO_LOGIN = 0;
+    private static final int REQUEST_FIREBASE_LOGIN = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,11 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
         if (requestCode == REQUEST_ENDOMONDO_LOGIN) {
             if (resultCode == LoginActivity.LOGIN_SUCCESS) {
                 Log.d("FITPREDLOG", "Login from Endomondo success");
-                showDashboard();
+                Intent firebaseLoginIntent = new Intent(getApplicationContext(), WeatherLoginActivity.class);
+                startActivityForResult(firebaseLoginIntent, REQUEST_FIREBASE_LOGIN);
             }
+        } else if (requestCode == REQUEST_FIREBASE_LOGIN) {
+            showDashboard();
         }
     }
 

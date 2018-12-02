@@ -135,7 +135,7 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
 
     }
 
-    private void graphWindSpeed(ArrayList<Date> dates, ArrayList<Double> windSpeeds) {
+    public void graphWindSpeed(ArrayList<Date> dates, ArrayList<Double> windSpeeds) {
         if (dates.isEmpty() || windSpeeds.isEmpty()) {
             return;
         }
@@ -156,7 +156,7 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
         ft.add(R.id.graphWeatherContainer, graphFragment).commit();
     }
 
-    private void graphAvgTemp(ArrayList<Date> dates, ArrayList<Double> avgTemps) {
+    public void graphAvgTemp(ArrayList<Date> dates, ArrayList<Double> avgTemps) {
         if (dates.isEmpty() || avgTemps.isEmpty()) {
             return;
         }

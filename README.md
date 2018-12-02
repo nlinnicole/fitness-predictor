@@ -38,3 +38,10 @@ The user is able to register to our application.
 
 The log out action logs out the user from both Endomondo and local login. After
 pressing this button, the application will go back to login activities.
+
+## Dependencies
+
+- Firebase
+- [GraphView](www.android-graphview.org/)
+- [Fork of Endo2java](https://github.com/tomleb/endo2java/)
+- Google services

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class WeatherLoginActivity extends AppCompatActivity {
+    public static final int REQUEST_REGISTER = 0;
 
     private EditText Name;
     private EditText Password;
@@ -52,11 +54,10 @@ public class WeatherLoginActivity extends AppCompatActivity {
         userRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+                Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                startActivityForResult(intent, REQUEST_REGISTER);
             }
         });
-
-
     }
 
     private void validate(String userName, String userPassword){
@@ -78,6 +79,14 @@ public class WeatherLoginActivity extends AppCompatActivity {
 
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_REGISTER) {
+            if (resultCode == RegistrationActivity.REGISTER_SUCCESS) {
+                Log.d("FITPREDLOG", "Registration success");
+                setResult(LOGIN_SUCCESS);
+                finish();
+            }
+        }
+    }
 }

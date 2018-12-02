@@ -55,10 +55,7 @@ public class LoginController {
          * Since login was success (No exception thrown), we store the username & password into the
          * shared preferences
          */
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(ENDOMONDO_USERNAME, encryptUsername(username));
-        editor.putString(ENDOMONDO_PASSWORD, encryptPassword(password));
-        editor.apply();
+        saveCredentials(username, password);
 
         return session;
     }
@@ -71,6 +68,13 @@ public class LoginController {
 
         FirebaseAuth.getInstance().signOut();
 
+    }
+
+    public void saveCredentials(String username, String password) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(ENDOMONDO_USERNAME, encryptUsername(username));
+        editor.putString(ENDOMONDO_PASSWORD, encryptPassword(password));
+        editor.apply();
     }
 
     private String decryptUsername(String encryptedUsername) {

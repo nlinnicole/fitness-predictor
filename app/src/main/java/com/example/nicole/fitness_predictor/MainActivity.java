@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
 
     private void showDashboard() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
-        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        NoSwipeViewPager viewPager = (NoSwipeViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new PageAdapter(getSupportFragmentManager(),
                 MainActivity.this));
 

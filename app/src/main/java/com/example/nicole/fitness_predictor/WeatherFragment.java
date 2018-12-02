@@ -78,7 +78,6 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
             ex.printStackTrace();
             return null;
         }
-
         return json;
     }
 
@@ -140,16 +139,12 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
             return;
         }
 
-        String title = "Wind Speed";
-        String yAxisLabel = "km/h";
-        String xAxisLabel = "Day";
-
         //Create graph 1
         graphFragment = GraphFragment.newInstance(toDate(dates),
                 toPrimitive(windSpeeds),
-                title,
-                yAxisLabel,
-                xAxisLabel);
+                "Wind Speed",
+                "km/h",
+                "Day");
         graphFragment.toLine();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
@@ -161,23 +156,18 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
             return;
         }
 
-        String title = "Average Temperature";
-        String yAxisLabel = "Degrees Celsius";
-        String xAxisLabel = "Day";
-
         //Create graph 1
         graphFragment2 = GraphFragment.newInstance(toDate(dates),
                 toPrimitive(avgTemps),
-                title,
-                yAxisLabel,
-                xAxisLabel);
+                "Average Temperature",
+                "Degrees Celsius",
+                "Day");
         graphFragment2.toLine();
 
         FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.add(R.id.graphWeatherContainer, graphFragment2).commit();
 
     }
-
 
     private double[] toPrimitive(ArrayList<Double> list) {
         double[] result = new double[list.size()];

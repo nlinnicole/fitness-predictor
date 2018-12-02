@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GridLabelRenderer;
@@ -102,9 +103,7 @@ public class GraphFragment extends Fragment {
         graph = (GraphView) v.findViewById(R.id.graph);
         Viewport vp = graph.getViewport();
         GridLabelRenderer glr = graph.getGridLabelRenderer();
-      
-        graph.setTitle(title);
-        graph.setTitleTextSize(60);
+        
         graph.getGridLabelRenderer().setHorizontalAxisTitle(xAxisLabel);
         graph.getGridLabelRenderer().setVerticalAxisTitle(yAxisLabel);
 
@@ -162,7 +161,6 @@ public class GraphFragment extends Fragment {
         data = datalist.toArray(data);
         return data;
     }
-
 
     public void addSeries(Date[] xdata, double[] y2data){
         DataPoint[] data = toDataPointArray(xdata, y2data);

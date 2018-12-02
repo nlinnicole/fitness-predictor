@@ -89,8 +89,10 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
         switch(chosenType) {
             case AVG_TEMP:
                 chosenY = "Avg Temp";
+                break;
             case WIND_SPEED:
                 chosenY = "Wind Speed";
+                break;
         }
         String in = loadJSONFromAsset();
 

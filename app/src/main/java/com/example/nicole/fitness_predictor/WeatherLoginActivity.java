@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +18,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class WeatherLoginActivity extends AppCompatActivity {
+    /**
+     * The only result possible is a success. If you can't login, then you shouldn't be able to go
+     * further in the application.
+     */
+    public static final int LOGIN_SUCCESS = 0;
+    public static final int REQUEST_REGISTER = 0;
 
     private EditText Name;
     private EditText Password;
@@ -27,7 +34,7 @@ public class WeatherLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_weather_login);
 
         Name = (EditText)findViewById(R.id.etName);
         Password = (EditText)findViewById(R.id.etPassword);
@@ -36,10 +43,10 @@ public class WeatherLoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = firebaseAuth.getCurrentUser();
 
-        if (user != null){
+        if (user != null) {
+            setResult(LOGIN_SUCCESS);
             finish();
-            //secondActivity is the homepage of the app - should be changed to "homepage".class
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            return;
         }
 
         Login.setOnClickListener(new View.OnClickListener() {
@@ -52,25 +59,21 @@ public class WeatherLoginActivity extends AppCompatActivity {
         userRegistration.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+                Intent intent = new Intent(getApplicationContext(), RegistrationActivity.class);
+                startActivityForResult(intent, REQUEST_REGISTER);
             }
         });
-
-
     }
 
-    private void validate(String userName, String userPassword){
-
+    private void validate(String userName, String userPassword) {
         firebaseAuth.signInWithEmailAndPassword(userName, userPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-
-                if(task.isSuccessful()){
-                    //meaning the user has logged in - "secondActivity" is basically the homepage of the app
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                if(task.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "Login Successful",Toast.LENGTH_SHORT).show();
-                }
-                else{
+                    setResult(LOGIN_SUCCESS);
+                    finish();
+                } else {
                     Toast.makeText(getApplicationContext(), "Login Failed",Toast.LENGTH_SHORT).show();
                 }
             }
@@ -78,6 +81,14 @@ public class WeatherLoginActivity extends AppCompatActivity {
 
     }
 
-
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_REGISTER) {
+            if (resultCode == RegistrationActivity.REGISTER_SUCCESS) {
+                Log.d("FITPREDLOG", "Registration success");
+                setResult(LOGIN_SUCCESS);
+                finish();
+            }
+        }
+    }
 }

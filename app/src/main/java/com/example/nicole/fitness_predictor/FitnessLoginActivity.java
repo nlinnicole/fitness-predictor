@@ -3,7 +3,6 @@ package com.example.nicole.fitness_predictor;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
@@ -27,12 +26,18 @@ import com.moomeen.endo2java.error.LoginException;
 /**
  * A login screen that offers login to Endomondo via email/password.
  *
- * The LoginActivity first tries to login with the credentials in the keystore first. Otherwise it
+ * The FitnessLoginActivity first tries to login with the credentials in the keystore first. Otherwise it
  * displays the login form.
  *
  * Based on Android Studio's Login Activity template
  */
-public class LoginActivity extends AppCompatActivity {
+public class FitnessLoginActivity extends AppCompatActivity {
+    /**
+     * The only result possible is a success. If you can't login, then you shouldn't be able to go
+     * further in the application.
+     */
+    public static final int LOGIN_SUCCESS = 0;
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -49,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_fitness_login);
 
         // Set up the login form.
         emailView = (EditText) findViewById(R.id.email);
@@ -188,8 +193,8 @@ public class LoginActivity extends AppCompatActivity {
     private void handleLoginSuccess(@NonNull EndomondoSession session) {
         FitnessApplication application = (FitnessApplication)getApplicationContext();
         application.setEndomondoSession(session);
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        startActivity(intent);
+        setResult(LOGIN_SUCCESS);
+        this.finish();
     }
 
     private void keystoreLoginFailed() {

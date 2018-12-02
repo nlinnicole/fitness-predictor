@@ -1,5 +1,28 @@
 # Fitness Predictor
 
+## How to Setup
+
+### Endomondo
+
+The application requires an Endomondo account. You can create an account
+[here](https://www.endomondo.com/).
+
+### Android Studio
+
+The easiest way to setup your development environment is to install [Android
+Studio](https://developer.android.com/studio/install).
+
+You need to install an emulator and the sdk. You can then open Android Studio
+and open the project.
+
+Press on the 'Run app' button to start the application. You can choose to run it
+on either an emulator or a physical device.
+
+### Local account
+
+The application requires a local account. You can register by clicking on the
+Register button in the Login prompt.
+
 ## Screenshots
 
 Here is a list of screenshots showing the functionality of the application.

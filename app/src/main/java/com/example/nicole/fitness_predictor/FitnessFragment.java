@@ -178,7 +178,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         ArrayList<Double> durationMovAvg = getMovingAverage(durationData, 10);
 
         //Create average speed graph
-        GraphFragment graphFragment = GraphFragment.newInstance(toDate(xAxisData),
+        graphFragment = GraphFragment.newInstance(toDate(xAxisData),
                 toPrimitive(averageSpeedData),
                 "Average Speed per Day",
                 "Average Speed (km/h)",
@@ -189,14 +189,14 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         ft.add(R.id.graphContainer, graphFragment).commitNow();
         graphFragment.addSeries(toDate(xAxisData), toPrimitive(speedMovAvg));
 
-        boldText = (TextView) getView().findViewById(R.id.avgText);
+        boldText = getView().findViewById(R.id.avgText);
         boldText.setText("Overall Average Speed: " + getAverage(averageSpeedData) + "km/h");
 
         graphTitle1 = getView().findViewById(R.id.graphTitle);
         graphTitle1.setText("Average Speed per Day");
 
         //Create average duration graph
-        GraphFragment graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
+        graphFragment2 = GraphFragment.newInstance(toDate(xAxisData),
                 toPrimitive(durationData),
                 "Duration per Day",
                 "Duration (min)",
@@ -210,9 +210,8 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         graphTitle2 = getView().findViewById(R.id.graphTitle2);
         graphTitle2.setText("Duration per Day");
 
-        boldText = (TextView) getView().findViewById(R.id.avgText2);
+        boldText = getView().findViewById(R.id.avgText2);
         boldText.setText("Overall Average Duration: " + getAverage(durationData) + "min");
-
     }
 
     private double[] toPrimitive(ArrayList<Double> list) {

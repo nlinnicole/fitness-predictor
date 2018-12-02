@@ -1,72 +1,3 @@
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
-    <!--xmlns:tools="http://schemas.android.com/tools"-->
-    <!--android:id="@+id/container"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--tools:context=".FitnessFragment">-->
-
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
-        <!--<LinearLayout-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content">-->
-
-            <!--<android.support.v7.widget.CardView-->
-                <!--android:id="@+id/graph1"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--card_view:cardBackgroundColor="@android:color/white"-->
-                <!--card_view:cardElevation="2sp"-->
-                <!--card_view:cardUseCompatPadding="true"/>-->
-
-                    <!--<LinearLayout-->
-                        <!--android:id="@+id/graphContainer"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:orientation="vertical" />-->
-                     <!--</LinearLayout>-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/boldText"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textStyle="bold" />-->
-             <!--</android.support.v7.widget.CardView>-->
-
-            <!--<android.support.v7.widget.CardView-->
-                <!--android:id="@+id/graph2"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--card_view:cardBackgroundColor="@android:color/white"-->
-                <!--card_view:cardElevation="2sp"-->
-                <!--card_view:cardUseCompatPadding="true"/>-->
-
-
-                    <!--<LinearLayout-->
-                            <!--android:id="@+id/graph2Container"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:orientation="vertical" />-->
-
-                    <!--<TextView-->
-                        <!--android:id="@+id/bold2Text"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textStyle="bold" />-->
-    <!---->
-
-        <!--</LinearLayout>-->
-
-<!--</ScrollView>-->
-
-
-    <!--</android.support.constraint.ConstraintLayout>-->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -118,10 +49,8 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/graphTitle"
                         android:maxLines="3"
-                        android:text="With animation"
                         android:textColor="#666"
                         android:textSize="14dp" />
-
 
                 </RelativeLayout>
 
@@ -162,7 +91,6 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/graphTitle2"
                         android:maxLines="3"
-                        android:text="With animation"
                         android:textColor="#666"
                         android:textSize="14dp" />
 

@@ -104,7 +104,7 @@ public class GraphFragment extends Fragment {
         Viewport vp = graph.getViewport();
         GridLabelRenderer glr = graph.getGridLabelRenderer();
 
-        glr.setHorizontalAxisTitle(xAxisLabel);
+        //glr.setHorizontalAxisTitle(xAxisLabel);
         glr.setVerticalAxisTitle(yAxisLabel);
 
         //set graph boundaries

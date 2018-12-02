@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.moomeen.endo2java.EndomondoSession;
 import com.moomeen.endo2java.error.LoginException;
 
@@ -67,6 +68,9 @@ public class LoginController {
         editor.remove(ENDOMONDO_USERNAME);
         editor.remove(ENDOMONDO_PASSWORD);
         editor.apply();
+
+        FirebaseAuth.getInstance().signOut();
+
     }
 
     private String decryptUsername(String encryptedUsername) {

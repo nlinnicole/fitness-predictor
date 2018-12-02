@@ -174,8 +174,8 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         }
 
         //Moving Average
-        ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 10);
-        ArrayList<Double> durationMovAvg = getMovingAverage(durationData, 10);
+        ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 3);
+        ArrayList<Double> durationMovAvg = getMovingAverage(durationData, 3);
 
         //Create average speed graph
         graphFragment = GraphFragment.newInstance(toDate(xAxisData),

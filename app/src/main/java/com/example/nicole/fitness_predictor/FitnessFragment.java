@@ -185,7 +185,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
                 "Day");
         graphFragment.toBar();
 
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getChildFragmentManager().beginTransaction();
         ft.add(R.id.graphContainer, graphFragment).commitNow();
         graphFragment.addSeries(toDate(xAxisData), toPrimitive(speedMovAvg));
 
@@ -203,7 +203,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
                 "Day");
         graphFragment2.toLine();
 
-        FragmentTransaction ft2 = getFragmentManager().beginTransaction();
+        FragmentTransaction ft2 = getChildFragmentManager().beginTransaction();
         ft2.add(R.id.graph2Container, graphFragment2).commitNow();
         graphFragment2.addSeries(toDate(xAxisData), toPrimitive(durationMovAvg));
 

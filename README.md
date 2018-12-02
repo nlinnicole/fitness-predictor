@@ -4,6 +4,13 @@
 
 Here is a list of screenshots showing the functionality of the application.
 
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+The dashboard has 3 tabs: fitness, weather and analysis. The fitness tab display
+data from Endomondo.
+
 ### Endomondo Login
 
 ![Endomondo Login](screenshots/endomondo_login.png)

@@ -1,6 +1,7 @@
 package com.example.nicole.fitness_predictor;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -172,6 +173,8 @@ public class GraphFragment extends Fragment {
         series.setColor(getResources().getColor(R.color.colorGraphAccent));
         series.setDrawDataPoints(true);
         series.setThickness(8);
+        series.setBackgroundColor(Color.argb(59, 246, 246, 125));
+        series.setDrawBackground(true);
 
         graph.addSeries(series);
     }

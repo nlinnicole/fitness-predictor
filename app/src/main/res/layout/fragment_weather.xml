@@ -30,15 +30,16 @@
                         android:id="@+id/graphContainer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:layout_below="@id/graphTitle"/>
 
                     <TextView
                         android:id="@+id/graphTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/graphContainer"
                         android:maxLines="3"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:textColor="#222"
                         android:textStyle="bold"
                         android:textSize="22dp"
@@ -64,15 +65,16 @@
                         android:id="@+id/graph2Container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:layout_below="@id/graphTitle2"/>
 
                     <TextView
                         android:id="@+id/graphTitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/graph2Container"
                         android:maxLines="3"
                         android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
                         android:textColor="#222"
                         android:textStyle="bold"
                         android:textSize="22dp"

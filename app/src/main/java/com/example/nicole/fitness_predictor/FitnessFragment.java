@@ -82,7 +82,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return isSameYear && isSameDayOfYear;
     }
 
-    private List<Workout> sortAndFilter(List<Workout> workouts) {
+    public List<Workout> sortAndFilter(List<Workout> workouts) {
         if (workouts.isEmpty()) {
             return workouts;
         }

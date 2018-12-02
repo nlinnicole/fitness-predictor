@@ -54,6 +54,26 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
     @Override
     public void onFragmentInteraction(Uri uri) { }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main_tabs, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_logout) {
+            LoginController.getInstance(getApplicationContext()).logout();
+            Log.d("FITPREDLOG", "Logged out");
+            handleLogin();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * The PageAdapter handles the fragments to show (So the tabs)
      */

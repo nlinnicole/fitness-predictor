@@ -62,6 +62,13 @@ public class LoginController {
         return session;
     }
 
+    public void logout() {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.remove(ENDOMONDO_USERNAME);
+        editor.remove(ENDOMONDO_PASSWORD);
+        editor.apply();
+    }
+
     private String decryptUsername(String encryptedUsername) {
         String username;
         // TODO Implement

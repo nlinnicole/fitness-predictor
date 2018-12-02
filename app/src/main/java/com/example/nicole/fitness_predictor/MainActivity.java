@@ -1,5 +1,6 @@
 package com.example.nicole.fitness_predictor;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,15 +10,22 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements GraphFragment.OnFragmentInteractionListener {
+    private static final int REQUEST_ENDOMONDO_LOGIN = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        handleLogin();
+    }
+
+    private void showDashboard() {
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
         viewPager.setAdapter(new PageAdapter(getSupportFragmentManager(),
@@ -26,6 +34,21 @@ public class MainActivity extends AppCompatActivity implements GraphFragment.OnF
         // Give the TabLayout the ViewPager
         TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+    private void handleLogin() {
+        Intent endomondoLoginIntent = new Intent(getApplicationContext(), LoginActivity.class);
+        startActivityForResult(endomondoLoginIntent, REQUEST_ENDOMONDO_LOGIN);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_ENDOMONDO_LOGIN) {
+            if (resultCode == LoginActivity.LOGIN_SUCCESS) {
+                Log.d("FITPREDLOG", "Login from Endomondo success");
+                showDashboard();
+            }
+        }
     }
 
     @Override

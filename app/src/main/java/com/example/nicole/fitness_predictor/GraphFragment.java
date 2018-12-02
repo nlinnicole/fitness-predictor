@@ -103,7 +103,7 @@ public class GraphFragment extends Fragment {
         graph = (GraphView) v.findViewById(R.id.graph);
         Viewport vp = graph.getViewport();
         GridLabelRenderer glr = graph.getGridLabelRenderer();
-        
+
         graph.getGridLabelRenderer().setHorizontalAxisTitle(xAxisLabel);
         graph.getGridLabelRenderer().setVerticalAxisTitle(yAxisLabel);
 

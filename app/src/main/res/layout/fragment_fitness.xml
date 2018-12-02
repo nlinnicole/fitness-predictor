@@ -74,49 +74,105 @@
     android:layout_height="match_parent"
     android:padding="16dp">
 
-    <android.support.v7.widget.CardView
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/graphContainer"
-        card_view:cardBackgroundColor="@android:color/white"
-        card_view:cardElevation="2sp"
-        card_view:cardUseCompatPadding="true">
+        android:layout_height="match_parent">
 
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp">
+            android:layout_height="match_parent">
 
-            <com.jjoe64.graphview.GraphView
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:id="@+id/graph" />
-
-            <TextView
-                android:id="@+id/graphTitle"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/graph"
-                android:maxLines="3"
-                android:layout_marginTop="8dp"
-                android:text="Example Graph"
-                android:textColor="#222"
-                android:textStyle="bold"
-                android:textSize="22dp" />
+                card_view:cardBackgroundColor="@android:color/white"
+                card_view:cardElevation="2sp"
+                card_view:cardUseCompatPadding="true">
 
-            <TextView
-                android:id="@+id/avgText"
-                android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/graphContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <TextView
+                        android:id="@+id/graphTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/graphContainer"
+                        android:maxLines="3"
+                        android:layout_marginTop="8dp"
+                        android:textColor="#222"
+                        android:textStyle="bold"
+                        android:textSize="22dp" />
+
+                    <TextView
+                        android:id="@+id/avgText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/graphTitle"
+                        android:maxLines="3"
+                        android:text="With animation"
+                        android:textColor="#666"
+                        android:textSize="14dp" />
+
+
+                </RelativeLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/graphTitle"
-                android:maxLines="3"
-                android:text="With animation"
-                android:textColor="#666"
-                android:textSize="14dp" />
+                card_view:cardBackgroundColor="@android:color/white"
+                card_view:cardElevation="2sp"
+                card_view:cardUseCompatPadding="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="16dp">
+
+                    <LinearLayout
+                        android:id="@+id/graph2Container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                    <TextView
+                        android:id="@+id/graphTitle2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/graph2Container"
+                        android:maxLines="3"
+                        android:layout_marginTop="8dp"
+                        android:textColor="#222"
+                        android:textStyle="bold"
+                        android:textSize="22dp" />
+
+                    <TextView
+                        android:id="@+id/avgText2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/graphTitle2"
+                        android:maxLines="3"
+                        android:text="With animation"
+                        android:textColor="#666"
+                        android:textSize="14dp" />
 
 
-        </RelativeLayout>
+                </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
+            </android.support.v7.widget.CardView>
 
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
+
+

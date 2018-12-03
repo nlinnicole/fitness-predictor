@@ -4,8 +4,14 @@ import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.moomeen.endo2java.model.Workout;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -58,5 +64,39 @@ public class ExampleInstrumentedTest {
         /* Test valid credential */
         controller.saveCredentials(TEST_ENDOMONDO_USERNAME, TEST_ENDOMONDO_PASSWORD);
         assertNotNull(controller.attemptLoginWithKeystore());
+    }
+
+    @Test
+    public void testFitnessFragmentFillDates()
+    {
+        FitnessFragment fragment = new FitnessFragment();
+        List<Workout> workouts = new ArrayList<>();
+
+        Workout w1 = new Workout();
+        w1.setDuration(10L);
+        w1.setStartTime("2018-10-14 14:30:34 UTC");
+
+        Workout w2 = new Workout();
+        w2.setDuration(15L);
+        w2.setStartTime("2018-10-17 17:45:12 UTC");
+
+        workouts.add(w1);
+        workouts.add(w2);
+
+        int size = workouts.size();
+        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
+        ArrayList<Double> durationData = new ArrayList<>(size);
+        ArrayList<Date> xAxisData = new ArrayList<>(size);
+
+        fragment.fillDates(workouts, averageSpeedData, durationData, xAxisData);
+
+        ArrayList<Double> expectedDurationData = new ArrayList<Double>(4);
+
+        expectedDurationData.add(Double.valueOf(workouts.get(0).getDuration().getStandardMinutes()));
+        expectedDurationData.add(Double.valueOf(workouts.get(1).getDuration().getStandardMinutes()));
+
+        for(int i = 0; i < expectedDurationData.size(); i++) {
+            assertEquals(durationData.get(i), expectedDurationData.get(i));
+        }
     }
 }

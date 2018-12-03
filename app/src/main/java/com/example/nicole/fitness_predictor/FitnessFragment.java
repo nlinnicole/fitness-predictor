@@ -117,39 +117,48 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return result;
     }
 
-    // TODO: Display graph first and then asynchronously add the data ?
-    private void displayFitnessActivity(List<Workout> workouts) {
-        if (workouts.isEmpty()) {
-            return;
+/*
+    private void fillMissingDates(Workout currentWorkout, DateTime currentTime,
+                                  ArrayList<Double> averageSpeedData,
+                                  ArrayList<Double> durationData,
+                                  ArrayList<Date> xAxisData)
+    {
+        // Bridge the gap between previous and current workout by filling in the respective
+        // array lists with empty data for the days with no workouts.
+        while (!isSameDay(currentTime, currentWorkout.getStartTime())) {
+            averageSpeedData.add(0d);
+            durationData.add(0d);
+
+            xAxisData.add(currentTime.toDate());
+
+            currentTime = currentTime.plusDays(1);
         }
-
-        workouts = sortAndFilter(workouts);
-
-        int size = workouts.size();
-        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
-        ArrayList<Double> durationData = new ArrayList<>(size);
-        ArrayList<Date> xAxisData = new ArrayList<>(size);
-
-        /**
-         * This disgusting piece of code fills the date that are missing
-         * (eg: We display 2018-06-01 even if there was no workout that day)
-         */
+    }
+*/
+    public void fillDates(List<Workout> workouts,
+                                  ArrayList<Double> averageSpeedData,
+                                  ArrayList<Double> durationData,
+                                  ArrayList<Date> xAxisData)
+    {
         DateTime currentTime = workouts.get(0).getStartTime();
-        for (int i = 0; i < size; i++) {
-            Workout workout = workouts.get(i);
+        for (int i = 0; i < workouts.size(); i++) {
+            Workout currentWorkout = workouts.get(i);
             //add workout data to respective ArrayLists
-            while (!isSameDay(currentTime, workout.getStartTime())) {
-                averageSpeedData.add(Double.valueOf(0));
-                durationData.add(Double.valueOf(0));
+            //fillMissingDates(currentWorkout, currentTime, averageSpeedData, durationData, xAxisData);
+
+            //add workout data to respective ArrayLists
+            while (!isSameDay(currentTime, currentWorkout.getStartTime())) {
+                averageSpeedData.add(0d);
+                durationData.add(0d);
 
                 xAxisData.add(currentTime.toDate());
-
+                Log.d("FITPREDLOG", "one more thing " + currentTime);
                 currentTime = currentTime.plusDays(1);
             }
 
-            Double averageSpeed = workout.getSpeedAvg();
-            DateTime startTime = workout.getStartTime();
-            Duration duration = workout.getDuration();
+            Double averageSpeed = currentWorkout.getSpeedAvg();
+            DateTime startTime = currentWorkout.getStartTime();
+            Duration duration = currentWorkout.getDuration();
 
             Log.d("FITPREDLOG", "speed: " + averageSpeed + ", duration: " + duration + ", start: " + startTime);
 
@@ -159,7 +168,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
                 //assume error, automatically set to 0
                 averageSpeedData.add(0.0);
             } else {
-                averageSpeedData.add(averageSpeed.doubleValue());
+                averageSpeedData.add(averageSpeed);
             }
 
             if (duration.getStandardMinutes() <= 0 || duration.getStandardMinutes() >= 100) {
@@ -168,10 +177,25 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
             } else {
                 durationData.add(Double.valueOf(duration.getStandardMinutes()));
             }
-
             xAxisData.add(currentTime.toDate());
             currentTime = currentTime.plusDays(1);
         }
+    }
+
+
+    // TODO: Display graph first and then asynchronously add the data ?
+    private void displayFitnessActivity(List<Workout> workouts) {
+        if (workouts.isEmpty()) {
+            return;
+        }
+        workouts = sortAndFilter(workouts);
+        int size = workouts.size();
+
+        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
+        ArrayList<Double> durationData = new ArrayList<>(size);
+        ArrayList<Date> xAxisData = new ArrayList<>(size);
+
+        fillDates(workouts, averageSpeedData, durationData, xAxisData);
 
         //Moving Average
         ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 3);

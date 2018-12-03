@@ -30,11 +30,12 @@ public class ExampleUnitTest {
         Workout w1 = new Workout();
         w1.setDuration(10L);
         w1.setStartTime("2018-10-14 14:30:34 UTC");
+        //w1.setDistance(10L);
 
         Workout w2 = new Workout();
         w2.setDuration(15L);
         w2.setStartTime("2018-10-17 17:45:12 UTC");
-        w2.setDistance(10L);
+        //w2.setDistance(12L);
 
         workouts.add(w1);
         workouts.add(w2);
@@ -49,10 +50,14 @@ public class ExampleUnitTest {
         ArrayList<Double> expectedDurationData = new ArrayList<Double>(4);
 
         expectedDurationData.add(Double.valueOf(workouts.get(0).getDuration().getStandardMinutes()));
+        expectedDurationData.add(0d);
+        expectedDurationData.add(0d);
         expectedDurationData.add(Double.valueOf(workouts.get(1).getDuration().getStandardMinutes()));
 
+        assertEquals(durationData.size(), expectedDurationData.size());
         for(int i = 0; i < expectedDurationData.size(); i++) {
             assertEquals(durationData.get(i), expectedDurationData.get(i));
+            assertEquals(1, 0);
         }
     }
 

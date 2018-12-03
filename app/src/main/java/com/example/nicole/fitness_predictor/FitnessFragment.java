@@ -139,7 +139,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
                 durationData.add(0d);
 
                 xAxisData.add(currentTime.toDate());
-                Log.d("FITPREDLOG", "one more thing " + currentTime);
+                Log.d("FITPREDLOG", "Day with no workout data: " + currentTime);
                 currentTime = currentTime.plusDays(1);
             }
 

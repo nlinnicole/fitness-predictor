@@ -70,9 +70,21 @@ public class ExampleInstrumentedTest {
     public void testFitnessFragmentFillDates()
     {
         FitnessFragment fragment = new FitnessFragment();
-        List<Workout> workouts = new ArrayList<>();
 
-        // Test 2 workouts with a 2 day gap between them.
+        /* Test fillDates method with no workout in the workouts list. Nothing should happen.*/
+        List<Workout> workouts = new ArrayList<>();
+        int size = workouts.size();
+        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
+        ArrayList<Double> durationData = new ArrayList<>(size);
+        ArrayList<Date> xAxisData = new ArrayList<>(size);
+
+        fragment.fillDates(workouts, averageSpeedData, durationData, xAxisData);
+        assertEquals(size, 0);
+        assertEquals(averageSpeedData.size(), 0);
+        assertEquals(durationData.size(), 0);
+        assertEquals(xAxisData.size(), 0);
+
+        /* Test 2 workouts with a 2 days gap between them.*/
         // The 2 days without a workout should still be added to the corresponding array lists,
         // with default data.
         Workout w1 = new Workout();
@@ -88,12 +100,8 @@ public class ExampleInstrumentedTest {
         workouts.add(w1);
         workouts.add(w2);
 
-        int size = workouts.size();
+        size = workouts.size();
         assertEquals(size, 2);
-
-        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
-        ArrayList<Double> durationData = new ArrayList<>(size);
-        ArrayList<Date> xAxisData = new ArrayList<>(size);
 
         fragment.fillDates(workouts, averageSpeedData, durationData, xAxisData);
 
@@ -118,7 +126,7 @@ public class ExampleInstrumentedTest {
         // Check that the value on the x axis is the proper one for the recorded workout days.
         assertEquals(xAxisData.get(0), workouts.get(0).getStartTime().toDate());
 
-        // Test workouts with out of bounds data.
+        /* Test workouts with out of bounds data.*/
         workouts = new ArrayList<>();
 
         w1 = new Workout();

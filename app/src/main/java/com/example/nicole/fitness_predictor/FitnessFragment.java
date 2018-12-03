@@ -127,6 +127,9 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
                                   ArrayList<Double> durationData,
                                   ArrayList<Date> xAxisData)
     {
+        if (workouts.isEmpty()) {
+            return;
+        }
         DateTime currentTime = workouts.get(0).getStartTime();
         for (int i = 0; i < workouts.size(); i++) {
             Workout currentWorkout = workouts.get(i);

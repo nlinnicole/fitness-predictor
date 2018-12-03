@@ -253,11 +253,11 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
             for (int i = 0; i < window; ++i) {
                 result.add(0.0);
             }
-            for (int i = 0; i < list.size(); i++) {
-                if ((i + (window - 1)) >= 0 && (i + (window - 1)) < list.size()) {
+            for (int j = 0; j < list.size(); j++) {
+                if ((j + (window - 1)) >= 0 && (j + (window - 1)) < list.size()) {
                     double sum = 0;
-                    for (int j = 0; j < window; j++) {
-                        sum += list.get(i + j);
+                    for (int k = 0; k < window; k++) {
+                        sum += list.get(j + k);
                     }
                     double avg = sum / window;
                     result.add(round(avg));

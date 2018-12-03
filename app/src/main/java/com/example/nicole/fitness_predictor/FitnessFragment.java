@@ -122,24 +122,6 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return result;
     }
 
-
-    public void fillMissingDates(Workout currentWorkout, DateTime currentTime,
-                                  ArrayList<Double> averageSpeedData,
-                                  ArrayList<Double> durationData,
-                                  ArrayList<Date> xAxisData)
-    {
-        // Bridge the gap between previous and current workout by filling in the respective
-        // array lists with empty data for the days with no workouts.
-        while (!isSameDay(currentTime, currentWorkout.getStartTime())) {
-            averageSpeedData.add(0d);
-            durationData.add(0d);
-
-            xAxisData.add(currentTime.toDate());
-            Log.d("FITPREDLOG", "one more thing " + currentTime);
-            currentTime = currentTime.plusDays(1);
-        }
-    }
-
     public void fillDates(List<Workout> workouts,
                                   ArrayList<Double> averageSpeedData,
                                   ArrayList<Double> durationData,

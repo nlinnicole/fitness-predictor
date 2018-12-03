@@ -47,4 +47,44 @@ public class ExampleUnitTest {
         assertEquals(workout2, result.get(0));
         assertFalse(result.contains(workout3));
     }
+
+    @Test
+    public void testGetMovingAverage(){
+        FitnessFragment fragment = new FitnessFragment();
+        ArrayList<Double> result = new ArrayList<Double>();
+
+        ArrayList<Double> list = new ArrayList<Double>();
+        list.add(15.3);
+        list.add(20.5);
+        list.add(23.6);
+        list.add(24.3);
+        list.add(25.3);
+        list.add(14.8);
+        list.add(20.3);
+        list.add(13.3);
+
+        int size1 = 0;
+        ArrayList<Double> expectedResult1 = new ArrayList<Double>(list);
+
+        int size2 = 3;
+        ArrayList<Double> expectedResult2 = new ArrayList<Double>();
+        expectedResult2.add(19.8);
+        expectedResult2.add(22.8);
+        expectedResult2.add(24.4);
+        expectedResult2.add(21.47);
+        expectedResult2.add(20.13);
+        expectedResult2.add(16.13);
+
+        int size3 = list.size();
+        ArrayList<Double> expectedResult3 = new ArrayList<Double>(list);
+
+        result = fragment.getMovingAverage(list, size1);
+        assertArrayEquals(expectedResult1.toArray(), result.toArray());
+
+        result = fragment.getMovingAverage(list, size2);
+        assertArrayEquals(expectedResult2.toArray(), result.toArray());
+
+        result = fragment.getMovingAverage(list, size3);
+        assertArrayEquals(expectedResult3.toArray(), result.toArray());
+    }
 }

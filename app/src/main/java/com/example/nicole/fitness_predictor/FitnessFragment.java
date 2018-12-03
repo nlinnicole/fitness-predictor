@@ -166,7 +166,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
 
             //Filter data
             // TODO: Decide on filtering limits
-            if (averageSpeed == null || averageSpeed <= MIN_AVG_SPEED || averageSpeed >= MAX_AVG_SPEED) {
+            if (averageSpeed <= MIN_AVG_SPEED || averageSpeed >= MAX_AVG_SPEED) {
                 //assume error, automatically set to 0
                 averageSpeedData.add(0.0);
             } else {

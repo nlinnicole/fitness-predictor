@@ -78,19 +78,19 @@ public class ExampleInstrumentedTest {
         Workout w1 = new Workout();
         w1.setDuration(10L);
         w1.setStartTime("2018-10-14 14:30:34 UTC");
-        w1.setSpeedAvg(10);
-        //w1.setDistance(10L);
+        w1.setSpeedAvg(10d);
 
         Workout w2 = new Workout();
         w2.setDuration(15L);
         w2.setStartTime("2018-10-17 17:45:12 UTC");
-        w2.setSpeedAvg(15);
-        //w2.setDistance(12L);
+        w2.setSpeedAvg(15d);
 
         workouts.add(w1);
         workouts.add(w2);
 
         int size = workouts.size();
+        assertEquals(size, 2);
+
         ArrayList<Double> averageSpeedData = new ArrayList<>(size);
         ArrayList<Double> durationData = new ArrayList<>(size);
         ArrayList<Date> xAxisData = new ArrayList<>(size);
@@ -104,10 +104,10 @@ public class ExampleInstrumentedTest {
         expectedDurationData.add(Double.valueOf(workouts.get(1).getDuration().getStandardMinutes()));
 
         ArrayList<Double> expectedAvgSpdData = new ArrayList<Double>(4);
+        expectedAvgSpdData.add(10d);
         expectedAvgSpdData.add(0d);
         expectedAvgSpdData.add(0d);
-        expectedAvgSpdData.add(0d);
-        expectedAvgSpdData.add(0d);
+        expectedAvgSpdData.add(15d);
 
         assertEquals(durationData.size(), expectedDurationData.size());
         assertEquals(averageSpeedData.size(), expectedAvgSpdData.size());
@@ -115,9 +115,8 @@ public class ExampleInstrumentedTest {
             assertEquals(durationData.get(i), expectedDurationData.get(i));
             assertEquals(averageSpeedData.get(i), expectedAvgSpdData.get(i));
         }
-        // Check that the value on the x axis is the proper one for the 2 recorded workout days.
+        // Check that the value on the x axis is the proper one for the recorded workout days.
         assertEquals(xAxisData.get(0), workouts.get(0).getStartTime().toDate());
-        assertEquals(xAxisData.get(3), workouts.get(1).getStartTime().toDate());
 
         // Test workouts with out of bounds data.
         workouts = new ArrayList<>();
@@ -125,14 +124,12 @@ public class ExampleInstrumentedTest {
         w1 = new Workout();
         w1.setDuration(10L);
         w1.setStartTime("2018-10-14 14:30:34 UTC");
-        w1.setSpeedAvg(fragment.MAX_AVG_SPEED + 1);
-        //w1.setDistance(12L);
+        w1.setSpeedAvg(fragment.MAX_AVG_SPEED + 1d);
 
         w2 = new Workout();
         w2.setDuration(15L);
         w2.setStartTime("2018-10-15 17:45:12 UTC");
-        w2.setSpeedAvg(fragment.MIN_AVG_SPEED - 1);
-        //w2.setDistance(12L);
+        w2.setSpeedAvg(fragment.MIN_AVG_SPEED - 1d);
 
         workouts.add(w1);
         workouts.add(w2);
@@ -158,8 +155,7 @@ public class ExampleInstrumentedTest {
             assertEquals(durationData.get(i), expectedDurationData.get(i));
             assertEquals(averageSpeedData.get(i), expectedAvgSpdData.get(i));
         }
-        // Check that the value on the x axis is the proper one for the 2 recorded workout days.
+        // Check that the value on the x axis is the proper for the recorded workout days.
         assertEquals(xAxisData.get(0), workouts.get(0).getStartTime().toDate());
-        assertEquals(xAxisData.get(1), workouts.get(1).getStartTime().toDate());
     }
 }

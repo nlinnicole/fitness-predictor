@@ -72,15 +72,20 @@ public class ExampleInstrumentedTest {
         FitnessFragment fragment = new FitnessFragment();
         List<Workout> workouts = new ArrayList<>();
 
+        // Test 2 workouts with a 2 day gap between them.
+        // The 2 days without a workout should still be added to the corresponding array lists,
+        // with default data.
         Workout w1 = new Workout();
         w1.setDuration(10L);
         w1.setStartTime("2018-10-14 14:30:34 UTC");
-        w1.setDistance(10L);
+        w1.setSpeedAvg(10);
+        //w1.setDistance(10L);
 
         Workout w2 = new Workout();
         w2.setDuration(15L);
         w2.setStartTime("2018-10-17 17:45:12 UTC");
-        w2.setDistance(12L);
+        w2.setSpeedAvg(15);
+        //w2.setDistance(12L);
 
         workouts.add(w1);
         workouts.add(w2);
@@ -93,15 +98,68 @@ public class ExampleInstrumentedTest {
         fragment.fillDates(workouts, averageSpeedData, durationData, xAxisData);
 
         ArrayList<Double> expectedDurationData = new ArrayList<Double>(4);
-
         expectedDurationData.add(Double.valueOf(workouts.get(0).getDuration().getStandardMinutes()));
         expectedDurationData.add(0d);
         expectedDurationData.add(0d);
         expectedDurationData.add(Double.valueOf(workouts.get(1).getDuration().getStandardMinutes()));
 
+        ArrayList<Double> expectedAvgSpdData = new ArrayList<Double>(4);
+        expectedAvgSpdData.add(0d);
+        expectedAvgSpdData.add(0d);
+        expectedAvgSpdData.add(0d);
+        expectedAvgSpdData.add(0d);
+
         assertEquals(durationData.size(), expectedDurationData.size());
+        assertEquals(averageSpeedData.size(), expectedAvgSpdData.size());
         for(int i = 0; i < expectedDurationData.size(); i++) {
             assertEquals(durationData.get(i), expectedDurationData.get(i));
+            assertEquals(averageSpeedData.get(i), expectedAvgSpdData.get(i));
         }
+        // Check that the value on the x axis is the proper one for the 2 recorded workout days.
+        assertEquals(xAxisData.get(0), workouts.get(0).getStartTime().toDate());
+        assertEquals(xAxisData.get(3), workouts.get(1).getStartTime().toDate());
+
+        // Test workouts with out of bounds data.
+        workouts = new ArrayList<>();
+
+        w1 = new Workout();
+        w1.setDuration(10L);
+        w1.setStartTime("2018-10-14 14:30:34 UTC");
+        w1.setSpeedAvg(fragment.MAX_AVG_SPEED + 1);
+        //w1.setDistance(12L);
+
+        w2 = new Workout();
+        w2.setDuration(15L);
+        w2.setStartTime("2018-10-15 17:45:12 UTC");
+        w2.setSpeedAvg(fragment.MIN_AVG_SPEED - 1);
+        //w2.setDistance(12L);
+
+        workouts.add(w1);
+        workouts.add(w2);
+
+        size = workouts.size();
+        averageSpeedData = new ArrayList<>(size);
+        durationData = new ArrayList<>(size);
+        xAxisData = new ArrayList<>(size);
+
+        fragment.fillDates(workouts, averageSpeedData, durationData, xAxisData);
+
+        expectedDurationData = new ArrayList<Double>(2);
+        expectedDurationData.add(Double.valueOf(workouts.get(0).getDuration().getStandardMinutes()));
+        expectedDurationData.add(Double.valueOf(workouts.get(1).getDuration().getStandardMinutes()));
+
+        expectedAvgSpdData = new ArrayList<Double>(2);
+        expectedAvgSpdData.add(0d);
+        expectedAvgSpdData.add(0d);
+
+        assertEquals(durationData.size(), expectedDurationData.size());
+        assertEquals(averageSpeedData.size(), expectedAvgSpdData.size());
+        for(int i = 0; i < expectedDurationData.size(); i++) {
+            assertEquals(durationData.get(i), expectedDurationData.get(i));
+            assertEquals(averageSpeedData.get(i), expectedAvgSpdData.get(i));
+        }
+        // Check that the value on the x axis is the proper one for the 2 recorded workout days.
+        assertEquals(xAxisData.get(0), workouts.get(0).getStartTime().toDate());
+        assertEquals(xAxisData.get(1), workouts.get(1).getStartTime().toDate());
     }
 }

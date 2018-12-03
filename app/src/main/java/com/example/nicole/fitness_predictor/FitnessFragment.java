@@ -30,6 +30,11 @@ import java.util.List;
 
 public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
+    final public int MIN_DURATION_IN_MINUTES = 0;
+    final public int MAX_DURATION_IN_MINUTES = 100;
+    final public int MIN_AVG_SPEED = 0;
+    final public int MAX_AVG_SPEED = 50;
+
     private TextView boldText = null;
     private GraphFragment graphFragment;
     private GraphFragment graphFragment2;
@@ -117,8 +122,8 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return result;
     }
 
-/*
-    private void fillMissingDates(Workout currentWorkout, DateTime currentTime,
+
+    public void fillMissingDates(Workout currentWorkout, DateTime currentTime,
                                   ArrayList<Double> averageSpeedData,
                                   ArrayList<Double> durationData,
                                   ArrayList<Date> xAxisData)
@@ -130,11 +135,11 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
             durationData.add(0d);
 
             xAxisData.add(currentTime.toDate());
-
+            Log.d("FITPREDLOG", "one more thing " + currentTime);
             currentTime = currentTime.plusDays(1);
         }
     }
-*/
+
     public void fillDates(List<Workout> workouts,
                                   ArrayList<Double> averageSpeedData,
                                   ArrayList<Double> durationData,
@@ -143,9 +148,6 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         DateTime currentTime = workouts.get(0).getStartTime();
         for (int i = 0; i < workouts.size(); i++) {
             Workout currentWorkout = workouts.get(i);
-            //add workout data to respective ArrayLists
-            //fillMissingDates(currentWorkout, currentTime, averageSpeedData, durationData, xAxisData);
-
             //add workout data to respective ArrayLists
             while (!isSameDay(currentTime, currentWorkout.getStartTime())) {
                 averageSpeedData.add(0d);
@@ -164,14 +166,14 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
 
             //Filter data
             // TODO: Decide on filtering limits
-            if (averageSpeed == null || averageSpeed <= 0 || averageSpeed >= 50) {
+            if (averageSpeed == null || averageSpeed <= MIN_AVG_SPEED || averageSpeed >= MAX_AVG_SPEED) {
                 //assume error, automatically set to 0
                 averageSpeedData.add(0.0);
             } else {
                 averageSpeedData.add(averageSpeed);
             }
 
-            if (duration.getStandardMinutes() <= 0 || duration.getStandardMinutes() >= 100) {
+            if (duration.getStandardMinutes() <= MIN_DURATION_IN_MINUTES|| duration.getStandardMinutes() >= MAX_DURATION_IN_MINUTES) {
                 //assume error, automatically set to 0
                 durationData.add(0.0);
             } else {

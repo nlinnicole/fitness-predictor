@@ -244,30 +244,25 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return sum;
     }
 
-    public ArrayList<Double> getMovingAverage(ArrayList<Double> list, int size) {
-        ArrayList<Double> result;
+    private ArrayList<Double> getMovingAverage(ArrayList<Double> list, int size) {
+        ArrayList<Double> result = new ArrayList<Double>();
         int window = size;
 
-        if (window > 0 && window < list.size()) {
-            result = new ArrayList<Double>();
-            for (int i = 0; i < window; ++i) {
-                result.add(0.0);
-            }
-            for (int j = 0; j < list.size(); j++) {
-                if ((j + (window - 1)) >= 0 && (j + (window - 1)) < list.size()) {
-                    double sum = 0;
-                    for (int k = 0; k < window; k++) {
-                        sum += list.get(j + k);
-                    }
-                    double avg = sum / window;
-                    result.add(round(avg));
-                }
-            }
-            return result;
-        } else {
-            result = new ArrayList(list);
-            return result;
+        //moving average offset
+        for (int i = 0; i < window; ++i) {
+            result.add(0.0);
         }
+        for (int i = 0; i < list.size(); i++) {
+            if ((i + (window-1)) >= 0 && (i + (window-1)) < list.size()) {
+                double sum = 0;
+                for (int j = 0; j < window; j++) {
+                    sum += list.get(i + j);
+                }
+                double avg = sum / window;
+                result.add(round(avg));
+            }
+        }
+        return result;
     }
 
     private double round(double d) {
@@ -303,6 +298,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         protected void onPostExecute(final List<Workout> workouts) {
             if (workouts.size() > 0) {
                 displayFitnessActivity(workouts);
+                AnalysisFragment.haveWorkouts(workouts, getActivity());
             } else {
                 // TODO: Unsure what do to.. Do we display a graph without any points ?
                 Log.d("FITPREDLOG", "No workout found from Endomondo");

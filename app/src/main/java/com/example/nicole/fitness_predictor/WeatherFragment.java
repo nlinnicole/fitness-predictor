@@ -107,20 +107,19 @@ public class WeatherFragment extends Fragment implements GraphFragment.OnFragmen
             e.printStackTrace();
         }
 
-        Date currentDate = new Date(118, 9, 25);
-        for (int i = 0; i < 14; ++i) {
+        Date startDate = new Date(118, 3, 1);
+        Date todaysDate = new Date();
+        while(!(startDate.getYear() == todaysDate.getYear() && startDate.getMonth() == todaysDate.getMonth() && startDate.getDate() == todaysDate.getDate()))
+        {
             try {
                 String dateInString;
-                if (currentDate.getDate() < 10)
-                    dateInString = "0" + currentDate.getDate() + "/" + (currentDate.getMonth() + 1) + "/" + (currentDate.getYear() - 100);
-                else
-                    dateInString = currentDate.getDate() + "/" + (currentDate.getMonth() + 1) + "/" + (currentDate.getYear() - 100);
+                dateInString = startDate.getDate() + "/" + (startDate.getMonth() + 1) + "/" + (startDate.getYear() - 100);
                 JSONObject jsonObject = reader.getJSONObject(dateInString);
-                dates.add(new Date(currentDate.getYear(), currentDate.getMonth(), currentDate.getDate()));
+                dates.add(new Date(startDate.getYear(), startDate.getMonth(), startDate.getDate()));
                 yAxis.add(jsonObject.getDouble(chosenY));
-                currentDate.setDate(currentDate.getDate() + 1);
+                startDate.setDate(startDate.getDate() + 1);
             } catch (Exception e) {
-                return;
+                startDate.setDate(startDate.getDate() + 1);
             }
         }
         //System.out.println(dates);

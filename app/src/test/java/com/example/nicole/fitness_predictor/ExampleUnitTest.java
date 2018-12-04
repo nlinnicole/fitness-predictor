@@ -5,6 +5,7 @@ import com.moomeen.endo2java.model.Workout;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;

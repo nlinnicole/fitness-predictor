@@ -101,7 +101,6 @@ public class ExampleInstrumentedTest {
         workouts.add(w2);
 
         size = workouts.size();
-        assertEquals(size, 2);
 
         fragment.fillDates(workouts, averageSpeedData, durationData, xAxisData);
 

@@ -75,6 +75,9 @@ public class ExampleUnitTest {
         // Test with a subset size of 3. This should yield a list of 6 "partial" averages.
         int size2 = 3;
         expectedResult = new ArrayList<Double>();
+        expectedResult.add(0.0);
+        expectedResult.add(0.0);
+        expectedResult.add(0.0);
         expectedResult.add(19.8);
         expectedResult.add(22.8);
         expectedResult.add(24.4);

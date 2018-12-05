@@ -66,7 +66,7 @@ public class LinearRegression extends AppCompatActivity {
     private void matchDates()
     {
         int fitnessDatesSize = fitnessDates.size();
-        int weatherDatesSize = weatherDates.size()
+        int weatherDatesSize = weatherDates.size();
         if(fitnessDatesSize == weatherDatesSize)
             return;
         if(fitnessDatesSize < weatherDatesSize)

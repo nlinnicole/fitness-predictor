@@ -48,4 +48,49 @@ public class ExampleUnitTest {
         assertEquals(workout2, result.get(0));
         assertFalse(result.contains(workout3));
     }
+
+    @Test
+    public void testGetMovingAverage(){
+        FitnessFragment fragment = new FitnessFragment();
+        ArrayList<Double> result = new ArrayList<Double>();
+        ArrayList<Double> expectedResult = new ArrayList<Double>();
+
+        ArrayList<Double> list = new ArrayList<Double>();
+        list.add(15.3);
+        list.add(20.5);
+        list.add(23.6);
+        list.add(24.3);
+        list.add(25.3);
+        list.add(14.8);
+        list.add(20.3);
+        list.add(13.3);
+
+        // Test with a subset size of 0. This should simply yield a copy of the original list
+        int size1 = 0;
+        expectedResult = new ArrayList<Double>(list);
+
+        result = fragment.getMovingAverage(list, size1);
+        assertArrayEquals(expectedResult.toArray(), result.toArray());
+
+        // Test with a subset size of 3. This should yield a list of 6 "partial" averages.
+        int size2 = 3;
+        expectedResult = new ArrayList<Double>();
+        expectedResult.add(19.8);
+        expectedResult.add(22.8);
+        expectedResult.add(24.4);
+        expectedResult.add(21.47);
+        expectedResult.add(20.13);
+        expectedResult.add(16.13);
+
+        result = fragment.getMovingAverage(list, size2);
+        assertArrayEquals(expectedResult.toArray(), result.toArray());
+
+        // Test with a subset size equal to the size of the list.
+        // This should simply yield a copy of the original list
+        int size3 = list.size();
+        expectedResult = new ArrayList<Double>(list);
+
+        result = fragment.getMovingAverage(list, size3);
+        assertArrayEquals(expectedResult.toArray(), result.toArray());
+    }
 }

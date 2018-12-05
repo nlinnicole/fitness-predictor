@@ -1,12 +1,53 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".AnalysisFragment">
 
-    <EditText
-        android:id="@+id/my_edit_text"
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:minHeight="200dp"
+        android:layout_margin="8dp"
+        card_view:cardBackgroundColor="@android:color/white"
+        card_view:cardElevation="2sp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp">
+
+            <TextView
+                android:id="@+id/todayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                style="@style/TextAppearance.AppCompat.Headline"
+                />
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/todayText"
+                android:adjustViewBounds="true"/>
+
+            <TextView
+                android:id="@+id/estimateText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image"
+                android:padding="8dp"
+                android:textSize = "20dp"
+                android:textColor="	?android:textColorSecondary"
+                style="@style/TextAppearance.AppCompat.Subhead"
+                />
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
 
 </FrameLayout>

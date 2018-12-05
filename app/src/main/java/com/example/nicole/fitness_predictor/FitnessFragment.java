@@ -19,7 +19,6 @@ import com.moomeen.endo2java.model.Workout;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -312,6 +311,7 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         protected void onPostExecute(final List<Workout> workouts) {
             if (workouts.size() > 0) {
                 displayFitnessActivity(workouts);
+                AnalysisFragment.haveWorkouts(workouts, getActivity());
             } else {
                 // TODO: Unsure what do to.. Do we display a graph without any points ?
                 Log.d("FITPREDLOG", "No workout found from Endomondo");

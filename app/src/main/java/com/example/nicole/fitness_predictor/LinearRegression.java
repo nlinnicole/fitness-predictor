@@ -65,24 +65,28 @@ public class LinearRegression extends AppCompatActivity {
 
     private void matchDates()
     {
-        if(fitnessDates.size() == weatherDates.size())
+        int fitnessDatesSize = fitnessDates.size();
+        int weatherDatesSize = weatherDates.size()
+        if(fitnessDatesSize == weatherDatesSize)
             return;
-        if(fitnessDates.size() < weatherDates.size())
+        if(fitnessDatesSize < weatherDatesSize)
         {
-            while(fitnessDates.size() != weatherDates.size())
+            while(fitnessDatesSize != weatherDatesSize)
             {
                 weatherDates.remove(weatherDates.size()-1);
                 averageTempData.remove(averageTempData.size()-1);
                 windSpeedData.remove(windSpeedData.size()-1);
+                weatherDatesSize = weatherDates.size();
             }
         }
-        else if(fitnessDates.size() > weatherDates.size())
+        else // if(fitnessDatesSize > weatherDatesSize)
         {
-            while(fitnessDates.size() != weatherDates.size())
+            while(weatherDatesSize != fitnessDatesSize)
             {
                 fitnessDates.remove(weatherDates.size()-1);
                 averageSpeedData.remove(averageTempData.size()-1);
                 durationData.remove(windSpeedData.size()-1);
+                fitnessDatesSize = fitnessDates.size();
             }
         }
     }

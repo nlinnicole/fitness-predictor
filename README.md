@@ -23,31 +23,39 @@ on either an emulator or a physical device.
 The application requires a local account. You can register by clicking on the
 Register button in the Login prompt.
 
+Sample Login Credentials:
+username: test3@example.com
+password: asdfasdf
+
 ## Screenshots
 
 Here is a list of screenshots showing the functionality of the application.
 
-### Dashboard
+### Fitness
 
-![Dashboard](screenshots/dashboard.png)
+![Fitness](screenshots/dashboard.png)
 
-The dashboard has 3 tabs: fitness, weather and analysis. The fitness tab display
-data from Endomondo.
+The dashboard has 3 tabs: fitness, weather, and analysis. The fitness tab displays data from Endomondo in pink and the moving average in yellow. The overall average is displayed under the graph.
+
+### Weather
+![Weather](screenshots/weather.png)
+The weather tab displays the wind speed and temperature in a graph. 
+
+### Analysis
+![Analysis](screenshots/analysis.png)
+The analysis tab predicts if the current day has favourable conditions to exercise based on historical data. The picture changes depending on the conditions of the day.
 
 ### Endomondo Login
 
 ![Endomondo Login](screenshots/endomondo_login.png)
 
-The user is required to log in to Endomondo to be able to go further into the
-application. It is necessary because we need to fetch the fitness data to
-display it.
+The user is required to log in to Endomondo to be able to go further into the application. This allows the application to fetch the workout data tracked by Endomondo to display it.
 
 ### Local Login
 
 ![Local Login](screenshots/local_login.png)
 
-The user is also required to log in with our Firebase database. The user is able
-to register an account using the Register button.
+The user is required to log in with our Firebase database. If the user does not have an existing account, they are able to register an account using the Register button.
 
 ### Local Registration
 
@@ -64,7 +72,10 @@ pressing this button, the application will go back to login activities.
 
 ## Dependencies
 
+- minSDK: 24
+- targetSDK: 27
 - Firebase
 - [GraphView](www.android-graphview.org/)
 - [Fork of Endo2java](https://github.com/tomleb/endo2java/)
 - Google services
+

@@ -244,29 +244,27 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return sum;
     }
 
-    public ArrayList<Double> getMovingAverage(ArrayList<Double> list, int size) {
+    public ArrayList<Double> getMovingAverage(ArrayList<Double> list, int subsetSize) {
         ArrayList<Double> result;
-        int window = size;
 
-        if (window > 0 && window < list.size()) {
+        if (subsetSize > 0 && subsetSize < list.size()) {
             result = new ArrayList<Double>();
-            for (int i = 0; i < window; ++i) {
+            for (int i = 0; i < subsetSize; ++i) {
                 result.add(0.0);
             }
             for (int j = 0; j < list.size(); j++) {
-                if ((j + (window - 1)) >= 0 && (j + (window - 1)) < list.size()) {
+                if ((j + (subsetSize - 1)) >= 0 && (j + (subsetSize - 1)) < list.size()) {
                     double sum = 0;
-                    for (int k = 0; k < window; k++) {
+                    for (int k = 0; k < subsetSize; k++) {
                         sum += list.get(j + k);
                     }
-                    double avg = sum / window;
+                    double avg = sum / subsetSize;
                     result.add(round(avg));
                 }
             }
             return result;
         } else {
-            result = new ArrayList(list);
-            return result;
+            return new ArrayList<Double>(list);
         }
     }
 

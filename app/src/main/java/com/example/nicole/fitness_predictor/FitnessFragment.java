@@ -30,6 +30,11 @@ import java.util.List;
 
 public class FitnessFragment extends Fragment implements GraphFragment.OnFragmentInteractionListener {
 
+    final public int MIN_DURATION_IN_MINUTES = 0;
+    final public int MAX_DURATION_IN_MINUTES = 100;
+    final public int MIN_AVG_SPEED = 0;
+    final public int MAX_AVG_SPEED = 50;
+
     private TextView boldText = null;
     private GraphFragment graphFragment;
     private GraphFragment graphFragment2;
@@ -117,61 +122,67 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return result;
     }
 
-    // TODO: Display graph first and then asynchronously add the data ?
-    private void displayFitnessActivity(List<Workout> workouts) {
+    public void fillDates(List<Workout> workouts,
+                                  ArrayList<Double> averageSpeedData,
+                                  ArrayList<Double> durationData,
+                                  ArrayList<Date> xAxisData)
+    {
         if (workouts.isEmpty()) {
             return;
         }
-
-        workouts = sortAndFilter(workouts);
-
-        int size = workouts.size();
-        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
-        ArrayList<Double> durationData = new ArrayList<>(size);
-        ArrayList<Date> xAxisData = new ArrayList<>(size);
-
-        /**
-         * This disgusting piece of code fills the date that are missing
-         * (eg: We display 2018-06-01 even if there was no workout that day)
-         */
         DateTime currentTime = workouts.get(0).getStartTime();
-        for (int i = 0; i < size; i++) {
-            Workout workout = workouts.get(i);
+        for (int i = 0; i < workouts.size(); i++) {
+            Workout currentWorkout = workouts.get(i);
             //add workout data to respective ArrayLists
-            while (!isSameDay(currentTime, workout.getStartTime())) {
-                averageSpeedData.add(Double.valueOf(0));
-                durationData.add(Double.valueOf(0));
+            while (!isSameDay(currentTime, currentWorkout.getStartTime())) {
+                averageSpeedData.add(0d);
+                durationData.add(0d);
 
                 xAxisData.add(currentTime.toDate());
-
+                Log.d("FITPREDLOG", "Day with no workout data: " + currentTime);
                 currentTime = currentTime.plusDays(1);
             }
 
-            Double averageSpeed = workout.getSpeedAvg();
-            DateTime startTime = workout.getStartTime();
-            Duration duration = workout.getDuration();
+            Double averageSpeed = currentWorkout.getSpeedAvg();
+            DateTime startTime = currentWorkout.getStartTime();
+            Duration duration = currentWorkout.getDuration();
 
             Log.d("FITPREDLOG", "speed: " + averageSpeed + ", duration: " + duration + ", start: " + startTime);
 
             //Filter data
             // TODO: Decide on filtering limits
-            if (averageSpeed <= 0 || averageSpeed >= 50) {
+            if (averageSpeed <= MIN_AVG_SPEED || averageSpeed >= MAX_AVG_SPEED) {
                 //assume error, automatically set to 0
                 averageSpeedData.add(0.0);
             } else {
-                averageSpeedData.add(averageSpeed.doubleValue());
+                averageSpeedData.add(averageSpeed);
             }
 
-            if (duration.getStandardMinutes() <= 0 || duration.getStandardMinutes() >= 100) {
+            if (duration.getStandardMinutes() <= MIN_DURATION_IN_MINUTES|| duration.getStandardMinutes() >= MAX_DURATION_IN_MINUTES) {
                 //assume error, automatically set to 0
                 durationData.add(0.0);
             } else {
                 durationData.add(Double.valueOf(duration.getStandardMinutes()));
             }
-
             xAxisData.add(currentTime.toDate());
             currentTime = currentTime.plusDays(1);
         }
+    }
+
+
+    // TODO: Display graph first and then asynchronously add the data ?
+    private void displayFitnessActivity(List<Workout> workouts) {
+        if (workouts.isEmpty()) {
+            return;
+        }
+        workouts = sortAndFilter(workouts);
+        int size = workouts.size();
+
+        ArrayList<Double> averageSpeedData = new ArrayList<>(size);
+        ArrayList<Double> durationData = new ArrayList<>(size);
+        ArrayList<Date> xAxisData = new ArrayList<>(size);
+
+        fillDates(workouts, averageSpeedData, durationData, xAxisData);
 
         //Moving Average
         ArrayList<Double> speedMovAvg = getMovingAverage(averageSpeedData, 3);
@@ -244,25 +255,28 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return sum;
     }
 
-    private ArrayList<Double> getMovingAverage(ArrayList<Double> list, int size) {
-        ArrayList<Double> result = new ArrayList<Double>();
-        int window = size;
+    public ArrayList<Double> getMovingAverage(ArrayList<Double> list, int subsetSize) {
+        ArrayList<Double> result;
 
-        //moving average offset
-        for (int i = 0; i < window; ++i) {
-            result.add(0.0);
-        }
-        for (int i = 0; i < list.size(); i++) {
-            if ((i + (window-1)) >= 0 && (i + (window-1)) < list.size()) {
-                double sum = 0;
-                for (int j = 0; j < window; j++) {
-                    sum += list.get(i + j);
-                }
-                double avg = sum / window;
-                result.add(round(avg));
+        if (subsetSize > 0 && subsetSize < list.size()) {
+            result = new ArrayList<Double>();
+            for (int i = 0; i < subsetSize; ++i) {
+                result.add(0.0);
             }
+            for (int j = 0; j < list.size(); j++) {
+                if ((j + (subsetSize - 1)) >= 0 && (j + (subsetSize - 1)) < list.size()) {
+                    double sum = 0;
+                    for (int k = 0; k < subsetSize; k++) {
+                        sum += list.get(j + k);
+                    }
+                    double avg = sum / subsetSize;
+                    result.add(round(avg));
+                }
+            }
+            return result;
+        } else {
+            return new ArrayList<Double>(list);
         }
-        return result;
     }
 
     private double round(double d) {

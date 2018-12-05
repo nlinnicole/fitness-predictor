@@ -242,6 +242,11 @@ public class FitnessFragment extends Fragment implements GraphFragment.OnFragmen
         return result;
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // API 11 bug fix
+    }
+
     private double getAverage(ArrayList<Double> list) {
         double sum = 0;
         if (!list.isEmpty()) {

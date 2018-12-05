@@ -1,5 +1,7 @@
 package com.example.nicole.fitness_predictor;
 
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.moomeen.endo2java.EndomondoSession;
@@ -34,6 +37,8 @@ public class AnalysisFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private TextView estimateText;
+    private TextView todayText;
+    private ImageView image;
     private static LinearRegression regression = new LinearRegression();
     public AnalysisFragment() { }
 
@@ -78,13 +83,21 @@ public class AnalysisFragment extends Fragment {
         FitnessApplication application = (FitnessApplication)getActivity().getApplicationContext();
         EndomondoSession session = application.getEndomondoSession();
         AnalysisFragment.EndomondoQueryTask task = new AnalysisFragment.EndomondoQueryTask(session);
-        estimateText = (TextView) view.findViewById(R.id.estimateText);
+        estimateText = view.findViewById(R.id.estimateText);
+        todayText = view.findViewById(R.id.todayText);
+        image = view.findViewById(R.id.image);
         double estimatedDuration = Math.round(regression.estimate(todaysTemp)*100)/100.0;
 
-        if(estimatedDuration > regression.averageDuration())
-            estimateText.setText("Todays estimated exercise duration is " + estimatedDuration + " minutes, which is higher than your average!");
-        else
-            estimateText.setText("Todays estimated exercise duration is " + estimatedDuration + " minutes, which is lower than your average!");
+        if(estimatedDuration > regression.averageDuration()) {
+            todayText.setText("Today is a good day to exercise!");
+            image.setImageResource(R.drawable.sunny_day_small);
+            estimateText.setText("Your estimated exercise duration is " +  estimatedDuration + " minutes, which is higher than your average!");
+        }
+        else {
+            todayText.setText("Today's conditions are not the best for exercising.");
+            image.setImageResource(R.drawable.cloudy_day_small);
+            estimateText.setText("Your estimated exercise duration is " +  estimatedDuration + " minutes, which is lower than your average!");
+        }
         return view;
     }
 

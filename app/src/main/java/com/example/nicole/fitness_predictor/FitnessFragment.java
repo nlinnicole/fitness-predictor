@@ -19,7 +19,6 @@ import com.moomeen.endo2java.model.Workout;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;

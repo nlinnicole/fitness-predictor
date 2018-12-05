@@ -39,10 +39,12 @@ The dashboard has 3 tabs: fitness, weather, and analysis. The fitness tab displa
 
 ### Weather
 ![Weather](screenshots/weather.png)
+
 The weather tab displays the wind speed and temperature in a graph. 
 
 ### Analysis
 ![Analysis](screenshots/analysis.png)
+
 The analysis tab predicts if the current day has favourable conditions to exercise based on historical data. The picture changes depending on the conditions of the day.
 
 ### Endomondo Login

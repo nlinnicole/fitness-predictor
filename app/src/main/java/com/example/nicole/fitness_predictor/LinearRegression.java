@@ -65,17 +65,8 @@ public class LinearRegression extends AppCompatActivity {
 
     private void matchDates()
     {
-//        int size = fitnessDates.size();
-//        for(int i = 0, j = 0; i < size; ++i)
-//        {
-//            while(!(fitnessDates.get(i).getYear() == weatherDates.get(j).getYear() && fitnessDates.get(i).getMonth() == weatherDates.get(j).getMonth() && fitnessDates.get(i).getDate() == weatherDates.get(j).getDate()))
-//            {
-//                weatherDates.remove(j);
-//                averageTempData.remove(j);
-//                windSpeedData.remove(j);
-//            }
-//        }
-        //temporary
+        if(fitnessDates.size() == weatherDates.size())
+            return;
         if(fitnessDates.size() < weatherDates.size())
         {
             while(fitnessDates.size() != weatherDates.size())
@@ -94,15 +85,6 @@ public class LinearRegression extends AppCompatActivity {
                 durationData.remove(windSpeedData.size()-1);
             }
         }
-        //end temporary, uncomment next bit
-        /*
-        while(fitnessDates.size() != weatherDates.size())
-        {
-            weatherDates.remove(weatherDates.size()-1);
-            averageTempData.remove(averageTempData.size()-1);
-            windSpeedData.remove(windSpeedData.size()-1);
-        }
-        */
     }
 
     private void calculateLinearRelation(List<Double> x, List<Double> y)
